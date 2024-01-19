@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->boolean('status')->default(0);
             $table->string('role')->default("user");
+            // $table->enum('role', ["user", "admin"])->default("user");
             $table->timestamps();
         });
     }
