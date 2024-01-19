@@ -11,10 +11,12 @@
 </head>
 
 <body>
+    @include('sweetalert::alert')
     @yield('content')
 </body>
 
 <script src="{{ asset('assets/client/js/bootstrap4.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @yield('script')
 
 </html>

@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Enum\UserRuleEnum;
+use App\Enum\UserStatusEnum;
 
 class User extends Authenticatable
 {
@@ -29,5 +30,6 @@ class User extends Authenticatable
 
     protected $casts = [
         'role' => UserRuleEnum::class,
+        'status' => UserStatusEnum::class,
     ];
 }

@@ -1,26 +1,12 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Mail\SendMail;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
 Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/home', function () {
     $title = "Trang chủ";
     $user = User::find(1);
     dd($user->name);
@@ -42,4 +28,14 @@ Route::get('/sendmail', function () {
 Route::get("/admin/dashboard",function(){
     $title = "Dashboard";
     return view("dashboard", compact("title"));
+});
+
+Route::prefix("/auth")->name("auth.")->group(function(){
+    Route::get("/register", [AuthController::class, "register"])->name("register");
+
+    Route::post("/register", [AuthController::class, "postRegister"])->name("postRegister");
+
+    Route::get("/login", [AuthController::class, "login"])->name("login");
+
+    Route::post("/login", [AuthController::class, "postLogin"])->name("postLogin");
 });
