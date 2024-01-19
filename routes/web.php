@@ -1,6 +1,7 @@
 <?php
 
 use App\Mail\SendMail;
+use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,9 @@ Route::get('/', function () {
 
 Route::get('/home', function () {
     $title = "Trang chủ";
+    $user = User::find(1);
+    dd($user->name);
+    echo "<h1>".$user->name."</h1>";
     return view('home', compact("title"));
 });
 
