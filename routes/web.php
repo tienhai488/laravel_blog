@@ -4,20 +4,16 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\UsersController;
 use App\Mail\SendMail;
-use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $title = "Trang chủ";
-    $user = User::find(1);
-    dd($user->name);
-    echo "<h1>".$user->name."</h1>";
     return view('home', compact("title"));
-})->name("home");
+})->name("home")->middleware("auth");
 
 Route::get('/sendmail', function () {
     $content = [
@@ -59,8 +55,14 @@ Route::get('/auth/reset-password/{token}', [ResetPasswordController::class, "res
 Route::post('/auth/reset-password', [ResetPasswordController::class, "postResetPassword"])->middleware('guest')->name('password.update');
 
 
-
 // Posts
 Route::prefix("posts")->name("posts.")->group(function(){
     Route::get("/", [PostsController::class, "index"])->middleware(["auth", "user_status"])->name("list");
+});
+
+// Users
+Route::prefix("users")->name("users.")->middleware("auth")->group(function(){
+    Route::get("profile", [UsersController::class, "profile"])->name("profile");
+
+    Route::post("profile", [UsersController::class, "postProfile"])->name("postProfile");
 });

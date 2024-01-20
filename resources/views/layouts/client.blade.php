@@ -12,6 +12,7 @@
 
 <body>
     @include('sweetalert::alert')
+    @include('layouts.navbar')
     @yield('content')
 </body>
 
