@@ -1,23 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
-use App\Http\Requests\LoginRequest;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\SendMail;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class AuthController extends Controller
+class RegisterController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware("guest")->except("logout");   
-    }
     public function register()
     {
         $title = "Đăng kí";
@@ -46,42 +41,11 @@ class AuthController extends Controller
 
             Mail::to($user->email)->send(new SendMail($content));
 
-            return redirect()->route("auth.login")->with("message", "Bạn đã đăng kí tài khoản thành công, bạn có thể đăng nhập ngay bây giờ!");
+            return redirect()->route("auth.login")->with("message", "Bạn đã đăng kí tài khoản thành công, bạn có thể đăng nhập khi đã được phê duyệt!");
         } else {
             Alert::error("Thất bại", "Thêm người dùng thất bại");
 
             return redirect()->route("auth.register")->with("message", "Hệ thống xảy ra lỗi vui lòng thử lại!");
         }
-    }
-
-    public function login()
-    {
-        
-        $title = "Đăng nhập";
-        return view("auth.login", compact("title"));
-    }
-
-    public function postLogin(LoginRequest $request)
-    {
-        if (Auth::attempt(['email' => $request->email, 'password' =>
-        $request->password])) {
-            Alert::success("Thành công", "Đăng nhập thành công!");
-            return redirect()->route("posts.list");
-        } else {
-            return back()->with("error", "Đăng nhập không thành công, Vui lòng kiểm tra lại mật khẩu!")->with("email", $request->email);
-        }
-    }
-
-    public function forgot()
-    {
-    }
-
-    public function postForgot()
-    {
-    }
-
-    public function logout(){
-        Auth::logout();
-        return redirect()->route("auth.login");
     }
 }

@@ -5,7 +5,7 @@
         <div class="col-6" style="margin: 20px auto;">
             <h1 class="text-center">{{ $title }}</h1>
             @session('message')
-                <div class="alert alert-info text-center">{{ session('message') }}</div>
+                <div class="alert alert-success text-center">{{ session('message') }}</div>
             @endsession
             @session('error')
                 <div class="alert alert-danger text-center">{{ session('error') }}</div>
@@ -43,7 +43,7 @@
                 <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
                 <hr>
                 <p class="text-center">
-                    <a href="{{ route('auth.forgot') }}">Quên mật khẩu</a>
+                    <a href="{{ route('auth.forgotPassword') }}">Quên mật khẩu</a>
                 </p>
             </form>
         </div>

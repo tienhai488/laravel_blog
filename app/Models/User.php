@@ -14,6 +14,9 @@ use App\Enum\UserStatusEnum;
 
 class User extends Authenticatable
 {
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
     // protected function name(): Attribute
     // {
     //     return Attribute::make(
