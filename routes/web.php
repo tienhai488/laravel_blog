@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PostsController;
 use App\Mail\SendMail;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
@@ -12,7 +13,7 @@ Route::get('/', function () {
     dd($user->name);
     echo "<h1>".$user->name."</h1>";
     return view('home', compact("title"));
-});
+})->name("home");
 
 Route::get('/sendmail', function () {
     $content = [
@@ -38,4 +39,14 @@ Route::prefix("/auth")->name("auth.")->group(function(){
     Route::get("/login", [AuthController::class, "login"])->name("login");
 
     Route::post("/login", [AuthController::class, "postLogin"])->name("postLogin");
+
+    Route::get("/forgot", [AuthController::class, "forgot"])->name("forgot");
+
+    Route::post("/forgot", [AuthController::class, "postForgot"])->name("postForgot");
+
+    Route::get("/logout", [AuthController::class, "logout"])->name("logout");
+});
+
+Route::prefix("posts")->name("posts.")->group(function(){
+    Route::get("/", [PostsController::class, "index"])->middleware(["auth", "user_status"])->name("list");
 });

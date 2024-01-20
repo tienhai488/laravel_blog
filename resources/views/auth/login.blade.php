@@ -7,6 +7,9 @@
             @session('message')
                 <div class="alert alert-info text-center">{{ session('message') }}</div>
             @endsession
+            @session('error')
+                <div class="alert alert-danger text-center">{{ session('error') }}</div>
+            @endsession
             @if ($errors->any())
                 <div class="alert alert-danger text-center">Vui lòng kiểm tra lại dữ liệu nhập vào!</div>
             @endif
@@ -15,8 +18,8 @@
                 <div class="form-group">
                     <label for="email">Email (*)</label>
                     <input id="email" type="text" placeholder="Email..."
-                        class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}"
-                        autocomplete="email" autofocus>
+                        class="form-control @error('email') is-invalid @enderror" name="email"
+                        value="{{ old('email') ?? session('email') }}" autocomplete="email" autofocus>
 
                     @error('email')
                         <span class="invalid-feedback" role="alert">
@@ -40,7 +43,7 @@
                 <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
                 <hr>
                 <p class="text-center">
-                    <a href="">Quên mật khẩu</a>
+                    <a href="{{ route('auth.forgot') }}">Quên mật khẩu</a>
                 </p>
             </form>
         </div>

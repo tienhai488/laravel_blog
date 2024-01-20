@@ -29,7 +29,7 @@ class RegisterRequest extends FormRequest
             "max" => ":attribute tối đa :max kí tự!",
             "min" => ":attribute ít nhất :min kí tự!",
             "string" => ":attribute phải là chuỗi!",
-            "email" => ":attribute không đúng định dạng email!",
+            "email" => ":attribute không đúng định dạng!",
             "unique" => ":attribute đã tồn tại trong hệ thống!",
             "regex" => ":attribute phải chứa ký tự hoa, ký tự thường, số, ký tự đặc biệt!",
             "same" => ":attribute không trùng khớp!",
