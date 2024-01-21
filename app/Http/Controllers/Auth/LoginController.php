@@ -21,7 +21,7 @@ class LoginController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' =>
         $request->password])) {
             Alert::success('Thành công', 'Đăng nhập thành công!');
-            return to_route('posts.list');
+            return to_route('posts.index');
         } else {
             return back()->with('error', 'Đăng nhập không thành công, Vui lòng kiểm tra lại mật khẩu!')->with('email', $request->email);
         }

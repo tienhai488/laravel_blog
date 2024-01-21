@@ -7,8 +7,8 @@
                 <li class="nav-item  @if (request()->route()->getName() == 'users.profile') active @endif">
                     <a class="nav-link" href="{{ route('users.profile') }}">Thông tin<span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item  @if (request()->route()->getName() == 'posts.list') active @endif">
-                    <a class="nav-link" href="{{ route('posts.list') }}">Bài viết của bạn<span
+                <li class="nav-item  @if (request()->route()->getName() == 'posts.index') active @endif">
+                    <a class="nav-link" href="{{ route('posts.index') }}">Bài viết của bạn<span
                             class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item  @if (request()->route()->getName() == '') active @endif">
