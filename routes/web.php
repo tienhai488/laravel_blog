@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\PostStatusEnum;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -7,6 +8,9 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\UsersController;
 use App\Mail\SendMail;
+use App\Models\Post;
+use App\Models\User;
+use Faker\Factory;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
@@ -56,13 +60,38 @@ Route::post('/auth/reset-password', [ResetPasswordController::class, 'postResetP
 
 
 // Posts
-Route::prefix('posts')->name('posts.')->group(function(){
-    Route::get('/', [PostsController::class, 'index'])->middleware(['auth', 'user_status'])->name('list');
-});
+Route::resource("posts", PostsController::class)->middleware(['auth', 'user_status']);
 
 // Users
 Route::prefix('users')->name('users.')->middleware('auth')->group(function(){
     Route::get('profile', [UsersController::class, 'profile'])->name('profile');
 
     Route::post('profile', [UsersController::class, 'postProfile'])->name('postProfile');
+    
+    Route::delete('delete-all-post', [UsersController::class, 'deleteAllPost'])->name('deleteAllPost');
+});
+
+Route::get("/faker", function(){
+    $ids = User::pluck('id')->toArray();
+
+    $faker = Factory::create();
+
+    $posts = null;
+    for ($i=0; $i < 50; $i++) { 
+        $post = new Post;
+
+        $post->title = $faker->text(100);
+        $post->slug = $faker->slug();
+        $post->user_id = $faker->randomElement(array_values($ids));
+        $post->description = $faker->text(200);
+        $post->content = $faker->text();
+        $post->publish_date = $faker->date("Y-m-d H:i:s");
+        $post->status = $faker->randomElement(PostStatusEnum::cases());
+        $post->created_at = $faker->date("Y-m-d H:i:s");
+        $post->updated_at = $faker->date("Y-m-d H:i:s");
+
+        $posts[] = $post;
+    }
+
+    dd($posts);
 });
