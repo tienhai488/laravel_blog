@@ -19,18 +19,18 @@ class CheckUserStatus
         $user = Auth::user();
         
         $check = true;
-        $message = "";
+        $message = '';
         if($user->status == UserStatusEnum::PENDING){
             $check = false;
-            $message = "Tài khoản của bạn chưa được phê duyệt, không thể đăng nhập ngay lúc này!";
+            $message = 'Tài khoản của bạn chưa được phê duyệt, không thể đăng nhập ngay lúc này!';
         }
         else if($user->status == UserStatusEnum::DENIED){
             $check = false;
-            $message = "Tài khoản của bạn đã bị từ chối liên hệ chúng tôi để biết thêm chi tiết!";
+            $message = 'Tài khoản của bạn đã bị từ chối liên hệ chúng tôi để biết thêm chi tiết!';
         }
         else if($user->status == UserStatusEnum::LOCKED){
             $check = false;
-            $message = "Tài khoản của bạn đã bị khóa!";
+            $message = 'Tài khoản của bạn đã bị khóa!';
         }
 
         if($check){
@@ -38,6 +38,6 @@ class CheckUserStatus
         }
         
         Auth::logout();
-        return redirect()->route("auth.login")->with("error", $message);
+        return to_route('auth.login')->with('error', $message);
     }
 }

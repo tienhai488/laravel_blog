@@ -11,8 +11,9 @@ class PostsController extends Controller
     public function __construct()
     {
     }
+    
     public function index(){
-        $title = "Danh sách bài viết";
-        return view("posts.list", compact("title"));
+        $title = 'Danh sách bài viết';
+        return view('posts.list', compact('title'));
     }
 }

@@ -28,8 +28,8 @@ class SendMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: $this->content["subject"],
-            from: new Address(env("MAIL_FROM_ADDRESS")),
+            subject: $this->content['subject'],
+            from: new Address(env('MAIL_FROM_ADDRESS')),
         );
     }
 

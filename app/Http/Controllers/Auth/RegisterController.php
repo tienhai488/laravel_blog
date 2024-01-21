@@ -15,8 +15,8 @@ class RegisterController extends Controller
 {
     public function register()
     {
-        $title = "Đăng kí";
-        return view("auth.register", compact("title"));
+        $title = 'Đăng kí';
+        return view('auth.register', compact('title'));
     }
 
     public function postRegister(RegisterRequest $request)
@@ -31,7 +31,7 @@ class RegisterController extends Controller
         $result = $user->save();
 
         if ($result) {
-            Alert::success("Thành công", "Thêm người dùng thành công");
+            Alert::success('Thành công', 'Thêm người dùng thành công');
 
             $content = [
                 'subject' => 'Chào bạn!',
@@ -40,11 +40,11 @@ class RegisterController extends Controller
 
             Mail::to($user->email)->send(new SendMail($content));
 
-            return redirect()->route("auth.login")->with("message", "Bạn đã đăng kí tài khoản thành công, bạn có thể đăng nhập khi đã được phê duyệt!");
+            return to_route('auth.login')->with('message', 'Bạn đã đăng kí tài khoản thành công, bạn có thể đăng nhập khi đã được phê duyệt!');
         } else {
-            Alert::error("Thất bại", "Thêm người dùng thất bại");
+            Alert::error('Thất bại', 'Thêm người dùng thất bại');
 
-            return redirect()->route("auth.register")->with("message", "Hệ thống xảy ra lỗi vui lòng thử lại!");
+            return to_route('auth.register')->with('message', 'Hệ thống xảy ra lỗi vui lòng thử lại!');
         }
     }
 }

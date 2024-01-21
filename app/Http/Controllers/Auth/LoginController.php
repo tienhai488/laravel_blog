@@ -12,23 +12,23 @@ class LoginController extends Controller
 {
     public function login()
     {
-        $title = "Đăng nhập";
-        return view("auth.login", compact("title"));
+        $title = 'Đăng nhập';
+        return view('auth.login', compact('title'));
     }
 
     public function postLogin(LoginRequest $request)
     {
         if (Auth::attempt(['email' => $request->email, 'password' =>
         $request->password])) {
-            Alert::success("Thành công", "Đăng nhập thành công!");
-            return redirect()->route("posts.list");
+            Alert::success('Thành công', 'Đăng nhập thành công!');
+            return to_route('posts.list');
         } else {
-            return back()->with("error", "Đăng nhập không thành công, Vui lòng kiểm tra lại mật khẩu!")->with("email", $request->email);
+            return back()->with('error', 'Đăng nhập không thành công, Vui lòng kiểm tra lại mật khẩu!')->with('email', $request->email);
         }
     }
 
     public function logout(){
         Auth::logout();
-        return redirect()->route("auth.login");
+        return to_route('auth.login');
     }
 }

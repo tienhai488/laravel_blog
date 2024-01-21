@@ -14,25 +14,25 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "email" => "required|email",
-            "password" => "required",
+            'email' => 'required|email',
+            'password' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            "required" => ":attribute bắt buộc phải nhập!",
-            "email" => ":attribute không đúng định dạng!",
-            "min" => ":attribute ít nhất :min kí tự!",
+            'required' => ':attribute bắt buộc phải nhập!',
+            'email' => ':attribute không đúng định dạng!',
+            'min' => ':attribute ít nhất :min kí tự!',
         ];
     }
 
     public function attributes()
     {
         return [
-            "email" => "Email",
-            "password" => "Mật khẩu",
+            'email' => 'Email',
+            'password' => 'Mật khẩu',
         ];
     }
 }

@@ -20,15 +20,19 @@ class User extends Authenticatable
     // protected function name(): Attribute
     // {
     //     return Attribute::make(
-    //         get: fn (mixed $value, array $attributes) => $attributes['last_name']." ".$attributes['first_name'],
+    //         get: fn (mixed $value, array $attributes) => $attributes['last_name'].' '.$attributes['first_name'],
     //     );
     // }
 
     protected function name(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->last_name." ".$this->first_name,
+            get: fn () => $this->last_name.' '.$this->first_name,
         );
+    }
+
+    public function Posts(){
+        return $this->hasMany(Post::class, 'user_id', 'id');
     }
 
     protected $casts = [

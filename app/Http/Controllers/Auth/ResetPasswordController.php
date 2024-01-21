@@ -15,8 +15,8 @@ use RealRashid\SweetAlert\Facades\Alert;
 class ResetPasswordController extends Controller
 {
     public function resetPassword(string $token){
-        $title = "Đặt lại mật khẩu";
-        return view('auth.reset_password', compact("title", "token"));
+        $title = 'Đặt lại mật khẩu';
+        return view('auth.reset_password', compact('title', 'token'));
     }
 
     public function postResetPassword(ResetPasswordRequest $request){
@@ -35,11 +35,11 @@ class ResetPasswordController extends Controller
         );
      
         if($status === Password::PASSWORD_RESET){
-            Alert::success("Thành công", "Đặt lại mật khẩu thành công");
-            return redirect()->route('auth.login')->with('message', "Thay đổi mật khẩu thành công, bạn có thể đăng nhập ngay bây giờ!");
+            Alert::success('Thành công', 'Đặt lại mật khẩu thành công');
+            return to_route('auth.login')->with('message', 'Thay đổi mật khẩu thành công, bạn có thể đăng nhập ngay bây giờ!');
         }
         else{
-            return back()->with("error", "Thay đổi mật khẩu không thành công, Vui lòng thử lại!");
+            return back()->with('error', 'Thay đổi mật khẩu không thành công, Vui lòng thử lại!');
         }
     }
 }

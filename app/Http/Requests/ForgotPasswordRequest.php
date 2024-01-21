@@ -14,23 +14,23 @@ class ForgotPasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "email" => "required|email|exists:users",
+            'email' => 'required|email|exists:users',
         ];
     }
 
     public function messages()
     {
         return [
-            "required" => ":attribute bắt buộc phải nhập!",
-            "email" => ":attribute không đúng định dạng!",
-            "exists" => ":attribute không tồn tại trong hệ thống!",
+            'required' => ':attribute bắt buộc phải nhập!',
+            'email' => ':attribute không đúng định dạng!',
+            'exists' => ':attribute không tồn tại trong hệ thống!',
         ];
     }
 
     public function attributes()
     {
         return [
-            "email" => "Email",
+            'email' => 'Email',
         ];
     }
 }

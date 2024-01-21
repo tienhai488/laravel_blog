@@ -10,8 +10,8 @@ class UsersController extends Controller
 {
     public function profile(){
         $user = Auth::user();
-        $title = "Thông tin cá nhân";
-        return view("users.profile", compact("title", "user"));
+        $title = 'Thông tin cá nhân';
+        return view('users.profile', compact('title', 'user'));
     }
 
     public function postProfile(UserProfileRequest $request){
@@ -25,11 +25,11 @@ class UsersController extends Controller
         $result = $user->save();
 
         if ($result) {
-            Alert::success("Thành công", "Cập nhật thông tin thành công");
+            Alert::success('Thành công', 'Cập nhật thông tin thành công');
 
-            return back()->with("message", "Cập nhật thông tin thành công!");
+            return back()->with('message', 'Cập nhật thông tin thành công!');
         } else {
-            return back()->with("message", "Cập nhật thông tin không thành công!");
+            return back()->with('message', 'Cập nhật thông tin không thành công!');
         }
     }
 }
