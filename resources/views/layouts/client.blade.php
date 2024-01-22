@@ -40,6 +40,8 @@
         href="{{ asset('assets/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}" />
     <link rel="stylesheet"
         href="{{ asset('assets/admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css"') }}" />
+
+    @yield('style')
 </head>
 
 <body>
@@ -98,7 +100,7 @@
 <script src="{{ asset('assets/admin/dist/js/demo.js') }}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ asset('assets/admin/dist/js/pages/dashboard.js') }}"></script>
-
+<script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
 
 @yield('script')
 

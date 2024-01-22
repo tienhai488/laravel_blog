@@ -48,11 +48,11 @@ Route::prefix('/auth')->name('auth.')->group(function(){
     Route::get('/forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->middleware('guest')->name('forgotPassword');
 
     Route::post('/forgot-password', [ForgotPasswordController::class, 'postForgotPassword'])->name('postForgotPassword');
-    
+
     Route::post('/reset-password', [ResetPasswordController::class, 'postResetPassword'])->name('postResetPassword');
 
     Route::get('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
-}); 
+});
 
 Route::get('/auth/reset-password/{token}', [ResetPasswordController::class, 'resetPassword'])->middleware('guest')->name('password.reset');
 
@@ -67,7 +67,7 @@ Route::prefix('users')->name('users.')->middleware('auth')->group(function(){
     Route::get('profile', [UsersController::class, 'profile'])->name('profile');
 
     Route::post('profile', [UsersController::class, 'postProfile'])->name('postProfile');
-    
+
     Route::delete('delete-all-post', [UsersController::class, 'deleteAllPost'])->name('deleteAllPost');
 });
 
@@ -77,7 +77,7 @@ Route::get("/faker", function(){
     $faker = Factory::create();
 
     $posts = null;
-    for ($i=0; $i < 50; $i++) { 
+    for ($i=0; $i < 50; $i++) {
         $post = new Post;
 
         $post->title = $faker->text(100);
@@ -94,4 +94,8 @@ Route::get("/faker", function(){
     }
 
     dd($posts);
+});
+
+Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
 });

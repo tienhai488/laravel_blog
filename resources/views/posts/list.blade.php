@@ -5,7 +5,10 @@
         <div class="col-8" style="margin: 20px auto;">
             <h1>{{ $title ?? 'Danh sách' }}</h1>
             <hr>
-            <a href="" class="btn btn-primary"><i class="fas fa-plus pr-1"></i>Thêm bài viết</a>
+            <a href="{{ route('posts.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus pr-1"></i>
+                Thêm bài viết
+            </a>
             <hr>
             <section class="content">
                 <div class="container-fluid">
@@ -46,7 +49,13 @@
                                                             <a
                                                                 href="{{ route('posts.show', ['post' => $item]) }}">{{ $item->title }}</a>
                                                         </td>
-                                                        <td>{{ $item->thumbnail }}</td>
+                                                        <td>
+                                                            <img style="width: 200px" src="{{ $item->thumbnail }}"
+                                                                alt="{{ $item->slug }}">
+                                                            {{-- <img style="width: 200px"
+                                                                src="{{ asset('storage/3/bdbp1.jpg') }}"
+                                                                alt="{{ $item->slug }}"> --}}
+                                                        </td>
                                                         <td>{{ $item->description }}</td>
                                                         <td>
                                                             @if (empty($item->publish_date))
@@ -55,7 +64,7 @@
                                                                 @datetime($item->publish_date)
                                                             @endif
                                                         </td>
-                                                        <td> @datetime($item->created_at) </td>
+                                                        <td> {{ $item->created_at }} </td>
                                                         <td class="text-center">
                                                             {{ getButtonPostStatus($item->status) }}
                                                         </td>
@@ -110,6 +119,7 @@
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
             $('#example2').DataTable({
+                "pageLength": 3,
                 "paging": true,
                 "lengthChange": false,
                 "searching": false,
