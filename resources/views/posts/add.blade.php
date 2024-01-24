@@ -42,9 +42,7 @@
                 <div class="form-group">
                     <label for="description">Description</label>
                     <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description"
-                        rows="5" placeholder="Description..." autocomplete="description" autofocus>
-                        {{ old('description') ?? '' }}
-                    </textarea>
+                        rows="5" placeholder="Description..." autocomplete="description" autofocus>{{ old('description') ?? '' }}</textarea>
                     @error('description')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -56,7 +54,8 @@
                     <div class="input-group row">
                         <div class="col-10">
                             <input id="thumbnail" class="form-control @error('thumbnail') is-invalid @enderror"
-                                type="text" name="thumbnail" style="width: 100%">
+                                type="text" name="thumbnail" style="width: 100%" placeholder="Thumbnail..."
+                                value="{{ old('thumbnail') }}">
                         </div>
                         <div class="col-2">
                             <span class="input-group-btn block">
@@ -77,9 +76,7 @@
                 <div class="form-group">
                     <label for="summernote">Content</label>
                     <textarea id="summernote" name="content" class="form-control @error('content') is-invalid @enderror"
-                        placeholder="Content...">
-                        {{ old('content') }}
-                    </textarea>
+                        placeholder="Content...">{{ old('content') }}</textarea>
                     @error('content')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>

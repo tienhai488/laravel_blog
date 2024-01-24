@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePostRequest;
+use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use DOMDocument;
+use DOMXPath;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class PostsController extends Controller
@@ -34,22 +37,32 @@ class PostsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
         $content = $request->content;
 
         $dom = new DOMDocument();
-        $dom->loadHTML('<meta charset="utf8">'.$content);
+
+        // Load HTML content
+        // libxml_use_internal_errors(true); // Disable libxml errors to handle invalid HTML
+        // @$dom->loadHTML('<meta charset="utf8">' .$content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        @$dom->loadHTML('<meta charset="utf8">' .$content);
+        // libxml_clear_errors(); // Clear libxml errors
 
         $images = $dom->getElementsByTagName('img');
 
         foreach ($images as $key => $img) {
-            $data = base64_decode(explode(',',explode(';',$img->getAttribute('src'))[1])[1]);
-            $image_name = "/storage/upload/" . time(). $key.'.png';
-            file_put_contents(public_path().$image_name, $data);
+            if (strpos($img->getAttribute('src'), 'data:image') === 0) {
+                $data = base64_decode(explode(',', explode(';', $img->getAttribute('src'))[1])[1]);
+                $image_name = "/storage/upload/" . time() . $key . '.png';
+                file_put_contents(public_path() . $image_name, $data);
 
-            $img->removeAttribute('src');
-            $img->setAttribute('src',$image_name);
+                $img->removeAttribute('src');
+                $img->setAttribute('src', $image_name);
+            }
+            else{
+
+            }
         }
         $content = $dom->saveHTML();
 
@@ -101,21 +114,56 @@ class PostsController extends Controller
         return view('posts.show', compact('title', 'post'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Post $post)
+    public function edit(Post $post, Request $request)
     {
         $title = 'Cập nhật bài viết';
-        return view('posts.show', compact('title', 'post'));
+        return view('posts.update', compact('title', 'post'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(PostRequest $request, Post $post)
     {
-        //
+        $content = $request->content;
+
+        $dom = new DOMDocument();
+        @$dom->loadHTML('<meta charset="utf8">' . $content);
+
+        $images = $dom->getElementsByTagName('img');
+
+        foreach ($images as $key => $img) {
+            if (strpos($img->getAttribute('src'), 'data:image/') === 0) {
+
+                $data = base64_decode(explode(',', explode(';', $img->getAttribute('src'))[1])[1]);
+                $image_name = "/storage/upload/" . time() . $key . '.png';
+                file_put_contents(public_path() . $image_name, $data);
+
+                $img->removeAttribute('src');
+                $img->setAttribute('src', $image_name);
+            }
+        }
+        $content = $dom->saveHTML();
+
+        $post->title = $request->title;
+        $post->slug = $request->slug;
+        $post->description = $request->description;
+        $post->content = $content;
+
+        $result = $post->save();
+
+        $post->clearMediaCollection();
+
+        $thumbnail = $request->thumbnail;
+        $post
+            ->addMedia(public_path().'/storage'.explode("storage", $thumbnail)[1])
+            // ->addMediaFromUrl($thumbnail)
+            ->toMediaCollection();
+
+        if ($result) {
+            Alert::success('Thành công!', "Cập nhật bài viết thành công!");
+            return to_route('posts.index')->with('message', "Cập nhật bài viết thành công!");
+        } else {
+            return to_route('posts.index')->with('error', "Cập nhật bài viết không thành công!");
+        }
+
     }
 
     /**
@@ -123,18 +171,17 @@ class PostsController extends Controller
      */
     public function destroy(Post $post)
     {
-        if(empty($post)){
+        if (empty($post)) {
             return redirect('posts.list')->with('error', 'Không tồn tại bài viết vui lòng kiểm tra lại!');
         }
 
         // $post->delete();
         $result = Post::destroy($post->id);
 
-        if($result > 0){
+        if ($result > 0) {
             Alert::success('Thành công', 'Xóa bài viết thành công');
             $message = 'Xóa bài viết thành công!';
-        }
-        else{
+        } else {
             $message = 'Xóa bài viết không thành công!';
         }
         return to_route('posts.index')->with('message', $message);
