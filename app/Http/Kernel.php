@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\CheckAuthorPost;
+use App\Http\Middleware\CheckPostStatus;
 use App\Http\Middleware\CheckUserStatus;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -68,5 +69,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'check_user_status' => CheckUserStatus::class,
         'check_author_post' => CheckAuthorPost::class,
+        'check_post_status_approved' => CheckPostStatus::class,
     ];
 }
