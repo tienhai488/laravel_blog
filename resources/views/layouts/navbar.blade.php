@@ -11,8 +11,9 @@
                     <a class="nav-link" href="{{ route('posts.index') }}">Bài viết của bạn<span
                             class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item  @if (request()->route()->getName() == '') active @endif">
-                    <a class="nav-link" href="{">Tất cả bài viết<span class="sr-only">(current)</span></a>
+                <li class="nav-item  @if (request()->routeIs('news.list')) active @endif">
+                    <a class="nav-link" href="{{ route('news.list') }}">Tất cả bài viết<span
+                            class="sr-only">(current)</span></a>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
@@ -22,8 +23,9 @@
     @else
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item  @if (request()->route()->getName() == '') active @endif">
-                    <a class="nav-link" href="{">Tất cả bài viết<span class="sr-only">(current)</span></a>
+                <li class="nav-item  @if (request()->routeIs('news.list')) active @endif">
+                    <a class="nav-link" href="{{ route('news.list') }}">Tất cả bài viết<span
+                            class="sr-only">(current)</span></a>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">

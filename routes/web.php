@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\UsersController;
 use App\Mail\SendMail;
@@ -30,13 +31,13 @@ Route::get('/sendmail', function () {
     Mail::to('tienhaile488@gmail.com')->send(new SendMail($content));
 });
 
-Route::get('/admin',function(){
+Route::get('/admin', function () {
     $title = 'Dashboard';
     return view('dashboard', compact('title'));
 });
 
 // Auth
-Route::prefix('/auth')->name('auth.')->group(function(){
+Route::prefix('/auth')->name('auth.')->group(function () {
     Route::get('/register', [RegisterController::class, 'register'])->middleware('guest')->name('register');
 
     Route::post('/register', [RegisterController::class, 'postRegister'])->name('postRegister');
@@ -62,8 +63,14 @@ Route::post('/auth/reset-password', [ResetPasswordController::class, 'postResetP
 // Posts
 Route::resource("posts", PostsController::class)->middleware(['auth', 'check_user_status']);
 
+Route::prefix("/news")->name("news.")->group(function () {
+    Route::get("/", [NewsController::class, "index"])->name("list");
+
+    Route::get("/{post:slug}", [NewsController::class, "detail"])->middleware("check_post_status_approved")->name("detail");
+});
+
 // Users
-Route::prefix('users')->name('users.')->middleware('auth')->group(function(){
+Route::prefix('users')->name('users.')->middleware('auth')->group(function () {
     Route::get('profile', [UsersController::class, 'profile'])->name('profile');
 
     Route::post('profile', [UsersController::class, 'postProfile'])->name('postProfile');
@@ -71,13 +78,13 @@ Route::prefix('users')->name('users.')->middleware('auth')->group(function(){
     Route::delete('delete-all-post', [UsersController::class, 'deleteAllPost'])->name('deleteAllPost');
 });
 
-Route::get("/faker", function(){
+Route::get("/faker", function () {
     $ids = User::pluck('id')->toArray();
 
     $faker = Factory::create();
 
     $posts = null;
-    for ($i=0; $i < 50; $i++) {
+    for ($i = 0; $i < 50; $i++) {
         $post = new Post;
 
         $post->title = $faker->text(100);
