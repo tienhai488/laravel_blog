@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreatePostRequest extends FormRequest
+class PostRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -13,13 +13,20 @@ class CreatePostRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
-            'title' => "required|string|max:100",
-            'slug' => "required|string|max:100",
+        $rules = [
+            'title' => "required|string|max:100|unique:posts",
+            'slug' => "required|string|max:100|unique:posts",
             'description' => "string|max:200",
             'content' => "required|string",
             'thumbnail' => "required",
         ];
+
+        if(request()->routeIs("posts.update")){
+            $rules["title"] = "required|string|max:100|unique:posts,title,".$this->post->id;
+            $rules["slug"] = "required|string|max:100|unique:posts,slug,".$this->post->id;
+        }
+
+        return $rules;
     }
 
     public function messages()
@@ -28,6 +35,7 @@ class CreatePostRequest extends FormRequest
             'required' => ':attribute bắt buộc phải nhập!',
             'string' => ':attribute phải là chuỗi!',
             'max' => ':attribute tối đa :max kí tự!',
+            'unique' => ':attribute đã tồn tại!',
             'thumbnail.required' => 'Vui lòng chọn hình ảnh cho bài viết!',
         ];
     }

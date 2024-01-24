@@ -60,7 +60,7 @@ Route::post('/auth/reset-password', [ResetPasswordController::class, 'postResetP
 
 
 // Posts
-Route::resource("posts", PostsController::class)->middleware(['auth', 'user_status']);
+Route::resource("posts", PostsController::class)->middleware(['auth', 'check_user_status']);
 
 // Users
 Route::prefix('users')->name('users.')->middleware('auth')->group(function(){
