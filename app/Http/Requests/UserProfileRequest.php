@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\UserStatusRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,11 +16,19 @@ class UserProfileRequest extends FormRequest
     public function rules(): array
     {
         $id = Auth::id();
-        return [
+        $rules = [
             'first_name' => 'required|max:30|string',
             'last_name' => 'required|max:30|string',
-            'email' => 'required|email|unique:users,email,'.$id,
+            'email' => 'required|email|max:100|unique:users,email,'.$id,
+            'address' => 'max:255',
         ];
+
+        if(request()->routeIs('admin.users.postUpdate')){
+            $rules['status'] = [new UserStatusRule];
+            $rules['email'] = 'required|email|max:100|unique:users,email,'.$this->user->id;
+        }
+
+        return $rules;
     }
 
     public function messages()
@@ -39,6 +48,8 @@ class UserProfileRequest extends FormRequest
             'first_name' => 'Tên',
             'last_name' => 'Họ',
             'email' => 'Email',
+            'address' => 'Địa chỉ',
+            'status' => 'Địa ',
         ];
     }
 }

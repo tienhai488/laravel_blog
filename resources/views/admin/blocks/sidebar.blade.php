@@ -15,7 +15,7 @@
                     alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">{{ $user->name }}</a>
+                <a href="{{ route('admin.profile') }}" class="d-block">{{ $user->name }}</a>
             </div>
         </div>
 
@@ -35,7 +35,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link ">
+                    <a href="{{ route('admin.users.index') }}"
+                        class="nav-link @if (request()->routeIs('admin.users.*')) active @endif">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
                             Quản lý tài khoản

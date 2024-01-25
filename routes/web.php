@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PostsController as AdminPostsController;
+use App\Http\Controllers\Admin\UsersController as AdminUsersController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -12,20 +13,37 @@ use App\Http\Controllers\PostsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, "index"])->name('home')->middleware('auth');
+Route::get('/', [HomeController::class, 'index'])->name('home')->middleware(['auth', 'check_user_status']);
 
 // admin
-Route::prefix("/admin")->middleware(["auth", "check_admin"])->name("admin.")->group(function(){
-    Route::get('/', [DashboardController::class, "index"])->name("dashboard");
+Route::prefix('/admin')->middleware(['auth', 'check_user_status', 'check_admin'])->name('admin.')->group(function(){
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::prefix("/posts")->name("posts.")->group(function(){
-        Route::get("/", [AdminPostsController::class, "index"])->name("index");
+    Route::get('/profile', [AdminUsersController::class, 'profile'])->name('profile');
 
-        Route::get("/update/{post}", [AdminPostsController::class, "update"])->name("update");
+    Route::post('/profile', [AdminUsersController::class, 'postProfile'])->name('postProfile');
 
-        Route::put("/update/{post}", [AdminPostsController::class, "postUpdate"])->name("postUpdate");
+    Route::get('/change-password', [AdminUsersController::class, 'changePassword'])->name('changePassword');
+
+    Route::post('/change-password', [AdminUsersController::class, 'postChangePassword'])->name('postChangePassword');
+
+    // users
+    Route::prefix('/users')->name('users.')->group(function(){
+        Route::get('/', [AdminUsersController::class, 'index'])->name('index');
+
+        Route::get('/update/{user}', [AdminUsersController::class, 'update'])->name('update');
+
+        Route::put('/update/{user}', [AdminUsersController::class, 'postUpdate'])->name('postUpdate');
     });
 
+    // posts
+    Route::prefix('/posts')->name('posts.')->group(function(){
+        Route::get('/', [AdminPostsController::class, 'index'])->name('index');
+
+        Route::get('/update/{post}', [AdminPostsController::class, 'update'])->name('update');
+
+        Route::put('/update/{post}', [AdminPostsController::class, 'postUpdate'])->name('postUpdate');
+    });
 });
 
 // Auth
@@ -53,16 +71,16 @@ Route::post('/auth/reset-password', [ResetPasswordController::class, 'postResetP
 
 
 // Posts
-Route::resource("posts", PostsController::class)->middleware(['auth', 'check_user_status']);
+Route::resource('posts', PostsController::class)->middleware(['auth', 'check_user_status']);
 
-Route::prefix("/news")->name("news.")->group(function () {
-    Route::get("/", [NewsController::class, "index"])->name("list");
+Route::prefix('/news')->name('news.')->group(function () {
+    Route::get('/', [NewsController::class, 'index'])->name('list');
 
-    Route::get("/{post:slug}", [NewsController::class, "detail"])->middleware("check_post_status_approved")->name("detail");
+    Route::get('/{post:slug}', [NewsController::class, 'detail'])->middleware('check_post_status_approved')->name('detail');
 });
 
 // Users
-Route::prefix('users')->name('users.')->middleware('auth')->group(function () {
+Route::prefix('users')->name('users.')->middleware(['auth', 'check_user_status'])->group(function () {
     Route::get('profile', [UsersController::class, 'profile'])->name('profile');
 
     Route::post('profile', [UsersController::class, 'postProfile'])->name('postProfile');
@@ -71,6 +89,6 @@ Route::prefix('users')->name('users.')->middleware('auth')->group(function () {
 });
 
 // File manager
-Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
+Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth', 'check_user_status']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
