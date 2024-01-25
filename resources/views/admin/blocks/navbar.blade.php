@@ -19,11 +19,15 @@
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-angle-right mr-2"></i> Thông tin
+                <a href="{{ route('admin.profile') }}" class="dropdown-item">
+                    <i class="fas fa-angle-right mr-2"></i> Thông tin cá nhân
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
+                <a href="{{ route('admin.changePassword') }}" class="dropdown-item">
+                    <i class="fas fa-angle-right mr-2"></i> Đổi mật khẩu
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="{{ route('auth.logout') }}" class="dropdown-item">
                     <i class="fas fa-angle-right mr-2"></i> Đăng xuất
                 </a>
                 <div class="dropdown-divider"></div>

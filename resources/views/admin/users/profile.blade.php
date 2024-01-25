@@ -1,16 +1,18 @@
-@extends('layouts.client')
+@extends('layouts.admin')
 
 @section('content')
     <div class="row">
-        <div class="col-6" style="margin: 20px auto;">
-            <h1 class="text-center">{{ $title }}</h1>
+        <div class="col-12">
             @session('message')
                 <div class="alert alert-success text-center">{{ session('message') }}</div>
+            @endsession
+            @session('error')
+                <div class="alert alert-success text-center">{{ session('error') }}</div>
             @endsession
             @if ($errors->any())
                 <div class="alert alert-danger text-center">Vui lòng kiểm tra lại dữ liệu nhập vào!</div>
             @endif
-            <form action="{{ route('users.profile') }}" method="post">
+            <form action="{{ route('admin.profile') }}" method="post">
                 @csrf
                 <div class="row">
                     <div class="form-group col-6">
