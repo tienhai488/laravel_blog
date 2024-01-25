@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckAuthorPost;
 use App\Http\Middleware\CheckPostStatus;
 use App\Http\Middleware\CheckUserStatus;
@@ -70,5 +71,6 @@ class Kernel extends HttpKernel
         'check_user_status' => CheckUserStatus::class,
         'check_author_post' => CheckAuthorPost::class,
         'check_post_status_approved' => CheckPostStatus::class,
+        'check_admin' => CheckAdmin::class,
     ];
 }

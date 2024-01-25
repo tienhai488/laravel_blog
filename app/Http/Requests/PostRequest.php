@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\PostStatusRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PostRequest extends FormRequest
@@ -21,9 +22,13 @@ class PostRequest extends FormRequest
             'thumbnail' => "required",
         ];
 
-        if(request()->routeIs("posts.update")){
+        if(request()->routeIs("posts.update") || request()->routeIs("admin.posts.postUpdate")){
             $rules["title"] = "required|string|max:100|unique:posts,title,".$this->post->id;
             $rules["slug"] = "required|string|max:100|unique:posts,slug,".$this->post->id;
+        }
+
+        if(request()->routeIs("admin.posts.postUpdate")){
+            $rules["status"] = [new PostStatusRule];
         }
 
         return $rules;

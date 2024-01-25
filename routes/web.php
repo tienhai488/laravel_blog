@@ -1,39 +1,31 @@
 <?php
 
-use App\Enum\PostStatusEnum;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PostsController as AdminPostsController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\UsersController;
-use App\Mail\SendMail;
-use App\Models\Post;
-use App\Models\User;
-use Faker\Factory;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    $title = 'Trang chủ';
-    return view('home', compact('title'));
-})->name('home')->middleware('auth');
+Route::get('/', [HomeController::class, "index"])->name('home')->middleware('auth');
 
-Route::get('/sendmail', function () {
-    $content = [
-        'subject' => 'Gửi mail thành công!',
-        'body' => '
-        Chào bạn <b>TienHai</b><br/>
-        Bạn vừa gửi mail thành công!'
-    ];
+// admin
+Route::prefix("/admin")->middleware(["auth", "check_admin"])->name("admin.")->group(function(){
+    Route::get('/', [DashboardController::class, "index"])->name("dashboard");
 
-    Mail::to('tienhaile488@gmail.com')->send(new SendMail($content));
-});
+    Route::prefix("/posts")->name("posts.")->group(function(){
+        Route::get("/", [AdminPostsController::class, "index"])->name("index");
 
-Route::get('/admin', function () {
-    $title = 'Dashboard';
-    return view('dashboard', compact('title'));
+        Route::get("/update/{post}", [AdminPostsController::class, "update"])->name("update");
+
+        Route::put("/update/{post}", [AdminPostsController::class, "postUpdate"])->name("postUpdate");
+    });
+
 });
 
 // Auth
@@ -78,31 +70,7 @@ Route::prefix('users')->name('users.')->middleware('auth')->group(function () {
     Route::delete('delete-all-post', [UsersController::class, 'deleteAllPost'])->name('deleteAllPost');
 });
 
-Route::get("/faker", function () {
-    $ids = User::pluck('id')->toArray();
-
-    $faker = Factory::create();
-
-    $posts = null;
-    for ($i = 0; $i < 50; $i++) {
-        $post = new Post;
-
-        $post->title = $faker->text(100);
-        $post->slug = $faker->slug();
-        $post->user_id = $faker->randomElement(array_values($ids));
-        $post->description = $faker->text(200);
-        $post->content = $faker->text();
-        $post->publish_date = $faker->date("Y-m-d H:i:s");
-        $post->status = $faker->randomElement(PostStatusEnum::cases());
-        $post->created_at = $faker->date("Y-m-d H:i:s");
-        $post->updated_at = $faker->date("Y-m-d H:i:s");
-
-        $posts[] = $post;
-    }
-
-    dd($posts);
-});
-
+// File manager
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
