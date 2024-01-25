@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\UserRoleEnum;
 use App\Enum\UserStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -20,7 +21,8 @@ return new class extends Migration
             $table->string('password');
             $table->string('address')->nullable();
             $table->boolean('status')->default(UserStatusEnum::PENDING);
-            $table->string('role')->default('user');
+            // $table->string('role')->default('user');
+            $table->string('role')->default(UserRoleEnum::USER);
             // $table->enum('role', ['user', 'admin'])->default('user');
             $table->timestamps();
         });
