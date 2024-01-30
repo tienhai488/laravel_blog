@@ -68,7 +68,7 @@
                                                             {{ $item->address }}
                                                         </td>
                                                         <td class="text-center">
-                                                            {{ getButtonUserStatus($item->status) }}
+                                                            {{ getButtonUserStatus($item) }}
                                                         </td>
                                                         <td class="text-center">
                                                             {{ $item->created_at }}

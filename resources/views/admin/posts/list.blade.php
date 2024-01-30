@@ -74,7 +74,7 @@
                                                             {{ $item->user->name }} ({{ $item->user->email }})
                                                         </td>
                                                         <td class="text-center">
-                                                            {{ getButtonPostStatus($item->status) }}
+                                                            {{ getButtonPostStatus($item) }}
                                                         </td>
                                                         <td>{{ $item->description }}</td>
                                                         <td>

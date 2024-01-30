@@ -24,13 +24,12 @@ class SendMailChangePostStatus implements ShouldQueue
 
     public function handle(): void
     {
-        $status = $this->post->status;
         $message = "";
-        if ($status == PostStatusEnum::PENDING) {
+        if ($this->post->isPending()) {
             $message = "đã chuyển về trạng thái chờ phê duyệt";
-        } else if ($status == PostStatusEnum::APPROVED) {
+        } else if ($this->post->isApproved()) {
             $message = "đã được phê duyệt";
-        } else if ($status == PostStatusEnum::DENIED) {
+        } else if ($this->post->isDenied()) {
             $message = "không được phê duyệt";
         }
         $content = [
