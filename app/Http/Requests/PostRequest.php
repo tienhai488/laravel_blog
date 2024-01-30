@@ -15,20 +15,49 @@ class PostRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'title' => "required|string|max:100|unique:posts",
-            'slug' => "required|string|max:100|unique:posts",
-            'description' => "string|max:200",
-            'content' => "required|string",
-            'thumbnail' => "required",
+            'title' => [
+                'required',
+                'string',
+                'max:100',
+                'unique:posts'
+            ],
+            'slug' => [
+                'required',
+                'string',
+                'max:100',
+                'unique:posts'
+            ],
+            'description' => [
+                'required',
+                'string',
+                'max:200'
+            ],
+            'content' => [
+                'required',
+                'string'
+            ],
+            'thumbnail' => [
+                'required'
+            ],
         ];
 
-        if(request()->routeIs("posts.update") || request()->routeIs("admin.posts.postUpdate")){
-            $rules["title"] = "required|string|max:100|unique:posts,title,".$this->post->id;
-            $rules["slug"] = "required|string|max:100|unique:posts,slug,".$this->post->id;
+        if (request()->routeIs('posts.update') || request()->routeIs('admin.posts.post_update')) {
+            $rules['title'] = [
+                'required',
+                'string',
+                'max:100',
+                'unique:posts,title,' . $this->post->id
+            ];
+            $rules['slug'] = [
+                'required',
+                'string',
+                'max:100',
+                'unique:posts,slug,' . $this->post->id
+            ];
         }
 
-        if(request()->routeIs("admin.posts.postUpdate")){
-            $rules["status"] = [new PostStatusRule];
+        if (request()->routeIs('admin.posts.post_update')) {
+            $rules['status'] = [new PostStatusRule];
         }
 
         return $rules;

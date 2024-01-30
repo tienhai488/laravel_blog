@@ -16,33 +16,33 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home')->middleware(['auth', 'check_user_status']);
 
 // admin
-Route::prefix('/admin')->middleware(['auth', 'check_user_status', 'check_admin'])->name('admin.')->group(function(){
+Route::prefix('/admin')->middleware(['auth', 'check_user_status', 'check_admin'])->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/profile', [AdminUsersController::class, 'profile'])->name('profile');
 
-    Route::post('/profile', [AdminUsersController::class, 'postProfile'])->name('postProfile');
+    Route::post('/profile', [AdminUsersController::class, 'postProfile']);
 
-    Route::get('/change-password', [AdminUsersController::class, 'changePassword'])->name('changePassword');
+    Route::get('/change-password', [AdminUsersController::class, 'changePassword'])->name('change_password');
 
-    Route::post('/change-password', [AdminUsersController::class, 'postChangePassword'])->name('postChangePassword');
+    Route::post('/change-password', [AdminUsersController::class, 'postChangePassword']);
 
     // users
-    Route::prefix('/users')->name('users.')->group(function(){
+    Route::prefix('/users')->name('users.')->group(function () {
         Route::get('/', [AdminUsersController::class, 'index'])->name('index');
 
         Route::get('/update/{user}', [AdminUsersController::class, 'update'])->name('update');
 
-        Route::put('/update/{user}', [AdminUsersController::class, 'postUpdate'])->name('postUpdate');
+        Route::put('/update/{user}', [AdminUsersController::class, 'postUpdate'])->name('post_update');
     });
 
     // posts
-    Route::prefix('/posts')->name('posts.')->group(function(){
+    Route::prefix('/posts')->name('posts.')->group(function () {
         Route::get('/', [AdminPostsController::class, 'index'])->name('index');
 
         Route::get('/update/{post}', [AdminPostsController::class, 'update'])->name('update');
 
-        Route::put('/update/{post}', [AdminPostsController::class, 'postUpdate'])->name('postUpdate');
+        Route::put('/update/{post}', [AdminPostsController::class, 'postUpdate'])->name("post_update");
     });
 });
 
@@ -50,17 +50,15 @@ Route::prefix('/admin')->middleware(['auth', 'check_user_status', 'check_admin']
 Route::prefix('/auth')->name('auth.')->group(function () {
     Route::get('/register', [RegisterController::class, 'register'])->middleware('guest')->name('register');
 
-    Route::post('/register', [RegisterController::class, 'postRegister'])->name('postRegister');
+    Route::post('/register', [RegisterController::class, 'postRegister']);
 
     Route::get('/login', [LoginController::class, 'login'])->middleware('guest')->name('login');
 
-    Route::post('/login', [LoginController::class, 'postLogin'])->name('postLogin');
+    Route::post('/login', [LoginController::class, 'postLogin']);
 
-    Route::get('/forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->middleware('guest')->name('forgotPassword');
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->middleware('guest')->name('forgot_password');
 
-    Route::post('/forgot-password', [ForgotPasswordController::class, 'postForgotPassword'])->name('postForgotPassword');
-
-    Route::post('/reset-password', [ResetPasswordController::class, 'postResetPassword'])->name('postResetPassword');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'postForgotPassword']);
 
     Route::get('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
 });
@@ -83,9 +81,9 @@ Route::prefix('/news')->name('news.')->group(function () {
 Route::prefix('users')->name('users.')->middleware(['auth', 'check_user_status'])->group(function () {
     Route::get('profile', [UsersController::class, 'profile'])->name('profile');
 
-    Route::post('profile', [UsersController::class, 'postProfile'])->name('postProfile');
+    Route::post('profile', [UsersController::class, 'postProfile']);
 
-    Route::delete('delete-all-post', [UsersController::class, 'deleteAllPost'])->name('deleteAllPost');
+    Route::delete('delete-all-post', [UsersController::class, 'deleteAllPost'])->name('delete_all_post');
 });
 
 // File manager

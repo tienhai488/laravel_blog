@@ -19,42 +19,14 @@
             <form action="{{ route('password.update') }}" method="post">
                 @csrf
                 <input type="hidden" name="token" value="{{ $token }}">
-                <div class="form-group">
-                    <label for="email">Email </label>
-                    <input id="email" type="text" placeholder="Email..."
-                        class="form-control @error('email') is-invalid @enderror" name="email"
-                        value="{{ request()->email }}" autocomplete="email" autofocus>
+                <x-form.input title="Email" placeholder="Email..." name="email" value="{{ request()->email }}"
+                    type="text" />
 
-                    @error('email')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="password">Password </label>
-                    <input id="password" type="password" placeholder="Password..."
-                        class="form-control @error('password') is-invalid @enderror" name="password" value=""
-                        autocomplete="password" autofocus>
+                <x-form.input title="Password" placeholder="Password..." name="password" value="" type="password" />
 
-                    @error('password')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="confirm_password">Confirm Password </label>
-                    <input id="confirm_password" type="password" placeholder="Confirm Password..."
-                        class="form-control @error('confirm_password') is-invalid @enderror" name="confirm_password"
-                        value="" autocomplete="confirm_password" autofocus>
+                <x-form.input title="Confirm Password" placeholder="Confirm Password..." name="password_confirmation"
+                    value="" type="password" />
 
-                    @error('confirm_password')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
                 <button type="submit" class="btn btn-primary btn-block">Đổi mật khẩu</button>
                 <hr>
                 <p class="text-center">

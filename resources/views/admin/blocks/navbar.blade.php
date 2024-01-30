@@ -23,7 +23,7 @@
                     <i class="fas fa-angle-right mr-2"></i> Thông tin cá nhân
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="{{ route('admin.changePassword') }}" class="dropdown-item">
+                <a href="{{ route('admin.change_password') }}" class="dropdown-item">
                     <i class="fas fa-angle-right mr-2"></i> Đổi mật khẩu
                 </a>
                 <div class="dropdown-divider"></div>

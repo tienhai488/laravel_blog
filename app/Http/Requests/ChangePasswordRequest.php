@@ -16,16 +16,19 @@ class ChangePasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'password_old' => ['required', new CheckPasswordRule],
+            'password_old' => [
+                'required',
+                new CheckPasswordRule
+            ],
             'password_new' => [
                 'required',
                 Password::min(8)
-                ->letters()
-                ->mixedCase()
-                ->numbers()
-                ->symbols()
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols(),
+                'confirmed'
             ],
-            'confirm_password' => 'required|same:password_new',
         ];
     }
 
@@ -34,7 +37,7 @@ class ChangePasswordRequest extends FormRequest
         return [
             'required' => ':attribute bắt buộc phải nhập!',
             'min' => ':attribute ít nhất :min kí tự!',
-            'same' => ':attribute không trùng khớp!',
+            'confirmed' => ':attribute xác nhận không trùng khớp!',
         ];
     }
 
@@ -43,7 +46,6 @@ class ChangePasswordRequest extends FormRequest
         return [
             'password_old' => 'Mật khẩu',
             'password_new' => 'Mật khẩu mới',
-            'confirm_password' => 'Mật khẩu xác nhận',
         ];
     }
 }

@@ -13,42 +13,13 @@
                 @csrf
                 @method('PUT')
                 <div class="row">
-                    <div class="form-group col-6">
-                        <label for="last_name">Last Name </label>
-                        <input id="last_name" type="text" placeholder="Last Name..."
-                            class="form-control @error('last_name') is-invalid @enderror" name="last_name"
-                            value="{{ old('last_name') ?? $userUpdate->last_name }}" autocomplete="last_name" autofocus>
+                    <x-form.input title="Last Name" name="last_name" type="text" placeholder="Last Name..."
+                        value="{{ old('last_name') ?? $userUpdate->last_name }}" class="col-6" />
+                    <x-form.input title="First Name" name="first_name" type="text" placeholder="First Name..."
+                        value="{{ old('first_name') ?? $userUpdate->first_name }}" class="col-6" />
+                    <x-form.input title="Email" name="email" type="text" placeholder="Email..."
+                        value="{{ old('email') ?? $userUpdate->email }}" class="col-6" />
 
-                        @error('last_name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                    <div class="form-group col-6">
-                        <label for="first_name">First Name </label>
-                        <input id="first_name" type="text" placeholder="First Name..."
-                            class="form-control @error('first_name') is-invalid @enderror" name="first_name"
-                            value="{{ old('first_name') ?? $userUpdate->first_name }}" autocomplete="first_name" autofocus>
-
-                        @error('first_name')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                    <div class="form-group col-6">
-                        <label for="email">Email </label>
-                        <input id="email" type="text" placeholder="Email..."
-                            class="form-control @error('email') is-invalid @enderror" name="email"
-                            value="{{ old('email') ?? $userUpdate->email }}" autocomplete="email" autofocus>
-
-                        @error('email')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
                     <div class="form-group col-6">
                         <label for="status">Status </label>
                         <select name="status" class="form-control @error('status') is-invalid @enderror">
@@ -65,16 +36,10 @@
                         @enderror
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="address">Address </label>
-                    <textarea name="address" id="address" class="form-control @error('address') is-invalid @enderror" cols="30"
-                        rows="5">{{ old('address') ?? $userUpdate->address }}</textarea>
-                    @error('address')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
+
+                <x-form.text-area title="Address" name="address" placeholder="Address..."
+                    value="{{ old('address') ?? $userUpdate->address }}" />
+
                 <button type="submit" class="btn btn-primary btn-block">Cập nhật</button>
             </form>
         </div>

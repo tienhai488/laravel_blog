@@ -15,30 +15,14 @@
             <form action="{{ route('admin.posts.update', ['post' => $post]) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input id="title" type="text" placeholder="Title..."
-                        class="form-control @error('title') is-invalid @enderror" name="title"
-                        value="{{ old('title') ?? $post->title }}" autocomplete="title" autofocus>
+                <x-form.input title="Title" placeholder="Title..." name="title" value="{{ old('title') ?? $post->title }}"
+                    type="text" />
 
-                    @error('title')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="slug">Slug</label>
-                    <input id="slug" type="text" placeholder="Slug..."
-                        class="form-control @error('slug') is-invalid @enderror" name="slug"
-                        value="{{ old('slug') ?? $post->slug }}" autocomplete="slug" autofocus>
+                <x-form.input title="Slug" placeholder="Slug..." name="slug" value="{{ old('slug') ?? $post->slug }}"
+                    type="text" />
 
-                    @error('slug')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
+
+
                 <div class="form-group">
                     <label for="status">Status</label>
                     <select name="status" class="form-control">
@@ -54,26 +38,11 @@
                         </span>
                     @enderror
                 </div>
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea class="form-control @error('description') is-invalid @enderror" name="description" id="description"
-                        rows="5" placeholder="Description..." autocomplete="description" autofocus>{{ old('description') ?? $post->description }}</textarea>
-                    @error('description')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="thumbnail">Thumnail</label>
-                    <input id="thumbnail" type="file" class="form-control" name="thumbnail"
-                        @error('thumbnail') is-invalid @enderror>
-                    @error('thumbnail')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
+                <x-form.text-area title="Description" name="description" placeholder="Description..."
+                    value="{{ old('description') ?? $post->description }}" />
+
+                <x-form.input title="Thumnail" placeholder="" name="thumbnail" value="" type="file" />
+
                 <div class="form-group">
                     <label for="summernote">Content</label>
                     <textarea id="summernote" name="content" class="form-control @error('content') is-invalid @enderror"

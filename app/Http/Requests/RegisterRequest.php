@@ -15,19 +15,30 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required|max:30|string',
-            'last_name' => 'required|max:30|string',
-            'email' => 'required|email|unique:users,email',
-            // 'password' => 'required|min:8|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[@$!%*#?&]).*$/'
-            'password' => [
-                'required', 
-                Password::min(8)
-                ->letters()
-                ->mixedCase()
-                ->numbers()
-                ->symbols()
+            'first_name' => [
+                'required',
+                'max:30',
+                'string'
             ],
-            'confirm_password' => 'required|same:password',
+            'last_name' => [
+                'required',
+                'max:30',
+                'string'
+            ],
+            'email' => [
+                'required',
+                'email:rfc,dns',
+                'unique:users,email'
+            ],
+            'password' => [
+                'required',
+                Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols(),
+                'confirmed'
+            ],
         ];
     }
 
@@ -40,8 +51,7 @@ class RegisterRequest extends FormRequest
             'string' => ':attribute phải là chuỗi!',
             'email' => ':attribute không đúng định dạng!',
             'unique' => ':attribute đã tồn tại trong hệ thống!',
-            // 'regex' => ':attribute phải chứa ký tự hoa, ký tự thường, số, ký tự đặc biệt!',
-            'same' => ':attribute không trùng khớp!',
+            'confirmed' => ':attribute xác nhận không trùng khớp!',
         ];
     }
 
@@ -52,7 +62,6 @@ class RegisterRequest extends FormRequest
             'last_name' => 'Họ',
             'email' => 'Email',
             'password' => 'Mật khẩu',
-            'confirm_password' => 'Mật khẩu xác nhận', 
         ];
     }
 }

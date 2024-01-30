@@ -5,6 +5,12 @@ use App\Enum\UserStatusEnum;
 use App\Mail\SendMail;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * Undocumented function
+ *
+ * @param [type] $status
+ * @return void
+ */
 function getButtonPostStatus($status)
 {
     $type = '';

@@ -22,7 +22,7 @@
                             @endsession
                             <div class="card">
                                 <div class="card-header">
-                                    <a href="{{ route('users.deleteAllPost') }}" class="btn btn-danger"
+                                    <a href="{{ route('users.delete_all_post') }}" class="btn btn-danger"
                                         data-confirm-delete="true">
                                         Xóa tất cả bài viết
                                     </a>

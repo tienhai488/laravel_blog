@@ -17,15 +17,35 @@ class UserProfileRequest extends FormRequest
     {
         $id = Auth::id();
         $rules = [
-            'first_name' => 'required|max:30|string',
-            'last_name' => 'required|max:30|string',
-            'email' => 'required|email|max:100|unique:users,email,'.$id,
-            'address' => 'max:255',
+            'first_name' => [
+                'required',
+                'max:30',
+                'string'
+            ],
+            'last_name' => [
+                'required',
+                'max:30',
+                'string'
+            ],
+            'email' => [
+                'required',
+                'email:rfc,dns',
+                'max:100',
+                'unique:users,email,' . $id
+            ],
+            'address' => [
+                'max:255'
+            ],
         ];
 
-        if(request()->routeIs('admin.users.postUpdate')){
+        if (request()->routeIs('admin.users.post_update')) {
             $rules['status'] = [new UserStatusRule];
-            $rules['email'] = 'required|email|max:100|unique:users,email,'.$this->user->id;
+            $rules['email'] = [
+                'required',
+                'email',
+                'max:100',
+                'unique:users,email,' . $this->user->id
+            ];
         }
 
         return $rules;

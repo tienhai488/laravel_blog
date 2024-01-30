@@ -13,37 +13,17 @@
             @if ($errors->any())
                 <div class="alert alert-danger text-center">Vui lòng kiểm tra lại dữ liệu nhập vào!</div>
             @endif
-            <form action="{{ route('auth.postLogin') }}" method="post">
+            <form action="{{ route('auth.login') }}" method="post">
                 @csrf
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input id="email" type="text" placeholder="Email..."
-                        class="form-control @error('email') is-invalid @enderror" name="email"
-                        value="{{ old('email') ?? session('email') }}" autocomplete="email" autofocus>
-
-                    @error('email')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input id="password" type="password" placeholder="Password..."
-                        class="form-control @error('password') is-invalid @enderror" name="password"
-                        value="{{ old('password') }}" autocomplete="password" autofocus>
-
-                    @error('password')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+                <x-form.input title="Email" name="email" type="text" placeholder="Email..."
+                    value="{{ old('email') ?? session('email') }}" />
+                <x-form.input title="Password" name="password" type="password" placeholder="Password..." value="" />
+                <button type="submit" class="btn btn-primary btn-block">
+                    Đăng nhập
+                </button>
                 <hr>
                 <p class="text-center">
-                    <a href="{{ route('auth.forgotPassword') }}">Quên mật khẩu</a>
+                    <a href="{{ route('auth.forgot_password') }}">Quên mật khẩu</a>
                 </p>
             </form>
         </div>

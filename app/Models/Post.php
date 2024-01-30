@@ -17,7 +17,8 @@ class Post extends Model implements HasMedia
 
     protected $with = ['media'];
 
-    public function User(){
+    public function user()
+    {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
@@ -34,12 +35,39 @@ class Post extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('images')
-            ->singleFile(); // Để chọn chỉ một file, không phải nhiều
+        $this->addMediaCollection("media")
+            ->singleFile();
+
+        $this->addMediaCollection("thumbnail")
+            ->singleFile();
     }
 
     public function media(): MorphMany
     {
         return $this->morphMany(config('media-library.media_model'), 'model');
     }
+
+    public function scopeIsPending($query)
+    {
+        return $query->where('status', PostStatusEnum::PENDING)->exists();
+    }
+
+    public function scopeIsApproved($query)
+    {
+        return $query->where('status', PostStatusEnum::APPROVED)->exists();
+    }
+
+    public function scopeIsDenied($query)
+    {
+        return $query->where('status', PostStatusEnum::DENIED)->exists();
+    }
+
+    protected $fillable = [
+        'title',
+        'slug',
+        'status',
+        'description',
+        'content',
+        'publish_date',
+    ];
 }
