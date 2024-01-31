@@ -43,24 +43,22 @@ class PostsController extends Controller
      */
     public function store(PostRequest $request)
     {
-        $content = $request->content;
-        $content = $this->postService->handleContent($content);
-
         $dataPost = [
             'title' => $request->title,
             'slug' => $request->slug,
             'description' => $request->description,
-            'content' => $content,
             'user_id' => Auth::id(),
+            'content' => ''
         ];
 
-        $result = $this->postService->addPost($dataPost);
+        $thumbnail = $request->thumbnail;
+        $post = $this->postService->addPost($dataPost, $thumbnail);
 
-        if ($result) {
-            Alert::success('Thành công!', 'Thêm bài viết thành công!');
-            return to_route('posts.index')->with('message', 'Thêm bài viết thành công!');
-        }
-        return to_route('posts.index')->with('error', 'Thêm bài viết không thành công!');
+        $content = $request->content;
+        $this->postService->handleContent($post, $content);
+
+        Alert::success('Thành công!', 'Thêm bài viết thành công!');
+        return to_route('posts.index')->with('message', 'Thêm bài viết thành công!');
     }
 
     /**
@@ -81,29 +79,27 @@ class PostsController extends Controller
      */
     public function edit(Post $post, Request $request)
     {
+        $thumbnail = $post->getFirstMediaUrl('thumbnail');
         $title = 'Cập nhật bài viết';
-        return view('posts.update', compact('title', 'post'));
+        return view('posts.update', compact('title', 'post', 'thumbnail'));
     }
 
     public function update(PostRequest $request, Post $post)
     {
         $content = $request->content;
-        $content = $this->postService->handleContent($content);
+        $this->postService->handleContent($post, $content);
 
         $dataUpdate = [
             'title' => $request->title,
             'slug' => $request->slug,
             'description' => $request->description,
-            'content' => $content,
         ];
 
-        $result = $this->postService->updatePost($post, $dataUpdate);
+        $thumbnail = $request->thumbnail;
+        $this->postService->updatePost($post, $dataUpdate, $thumbnail);
 
-        if ($result) {
-            Alert::success('Thành công!', 'Cập nhật bài viết thành công!');
-            return to_route('posts.index')->with('message', 'Cập nhật bài viết thành công!');
-        }
-        return to_route('posts.index')->with('error', 'Cập nhật bài viết không thành công!');
+        Alert::success('Thành công!', 'Cập nhật bài viết thành công!');
+        return to_route('posts.index')->with('message', 'Cập nhật bài viết thành công!');
     }
 
     /**

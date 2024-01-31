@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use App\Enum\UserRoleEnum;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -35,23 +33,32 @@ class User extends Authenticatable
         'status' => UserStatusEnum::class,
     ];
 
-    public function scopeIsPending($query)
+    public function scopeIsPending($query, $user_id)
     {
-        return $query->where('status', UserStatusEnum::PENDING)->exists();
+        return $query->where('id', $user_id)->where('status', UserStatusEnum::PENDING)->exists();
     }
 
-    public function scopeIsApproved($query)
+    public function scopeIsApproved($query, $user_id)
     {
-        return $query->where('status', UserStatusEnum::APPROVED)->exists();
+        return $query->where('id', $user_id)->where('status', UserStatusEnum::APPROVED)->exists();
     }
 
-    public function scopeIsDenied($query)
+    public function scopeIsDenied($query, $user_id)
     {
-        return $query->where('status', UserStatusEnum::DENIED)->exists();
+        return $query->where('id', $user_id)->where('status', UserStatusEnum::DENIED)->exists();
     }
 
-    public function scopeIsLocked($query)
+    public function scopeIsLocked($query, $user_id)
     {
-        return $query->where('status', UserStatusEnum::LOCKED)->exists();
+        return $query->where('id', $user_id)->where('status', UserStatusEnum::LOCKED)->exists();
     }
+
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'email',
+        'password',
+        'address',
+        'status',
+    ];
 }

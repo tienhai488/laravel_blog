@@ -32,7 +32,6 @@ class PostsController extends Controller
             'email' => $request->email,
             'status' => $request->status,
         ];
-
         $posts = $this->postService->getAllPost($filter);
         $user = Auth::user();
         $title = 'Danh sách bài viết';
@@ -53,9 +52,10 @@ class PostsController extends Controller
      */
     public function update(Post $post)
     {
+        $thumbnail = $post->getFirstMediaUrl('thumbnail');
         $user = Auth::user();
         $title = 'Cập nhật bài viết';
-        return view('admin.posts.update', compact('title', 'post', 'user'));
+        return view('admin.posts.update', compact('title', 'post', 'user', 'thumbnail'));
     }
 
     /**
@@ -68,7 +68,7 @@ class PostsController extends Controller
     public function postUpdate(PostRequest $request, Post $post)
     {
         $content = $request->content;
-        $content = $this->postService->handleContent($content);
+        $this->postService->handleContent($post, $content);
 
         $checkSendMail = $post->status->value != $request->status;
 
@@ -77,23 +77,20 @@ class PostsController extends Controller
             'slug' => $request->slug,
             'status' => $request->status,
             'description' => $request->description,
-            'content' => $content,
         ];
 
-        if ($post->isApproved()) {
+        if ($post->isApproved($post)) {
             $dataUpdate['publish_date'] = date('Y-m-d H:i:s');
         } else {
             $dataUpdate['publish_date'] = null;
         }
 
-        $result = $this->postService->updatePost($post, $dataUpdate);
+        $thumbnail = $request->thumbnail;
+        $this->postService->updatePost($post, $dataUpdate, $thumbnail);
 
-        if ($result) {
-            Alert::success('Thành công!', 'Cập nhật bài viết thành công!');
-            $this->postService->sendMailChangePostStatus($post, $checkSendMail);
+        Alert::success('Thành công!', 'Cập nhật bài viết thành công!');
+        $this->postService->sendMailChangePostStatus($post, $checkSendMail);
 
-            return to_route('admin.posts.index')->with('message', 'Cập nhật bài viết thành công!');
-        }
-        return to_route('admin.posts.index')->with('error', 'Cập nhật bài viết không thành công!');
+        return to_route('admin.posts.index')->with('message', 'Cập nhật bài viết thành công!');
     }
 }

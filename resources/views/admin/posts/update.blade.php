@@ -41,8 +41,30 @@
                 <x-form.text-area title="Description" name="description" placeholder="Description..."
                     value="{{ old('description') ?? $post->description }}" />
 
-                <x-form.input title="Thumnail" placeholder="" name="thumbnail" value="" type="file" />
-
+                <div class="form-group">
+                    <label for="thumbnail">Thumnail</label>
+                    <div class="input-group row">
+                        <div class="col-10">
+                            <input id="thumbnail" class="form-control @error('thumbnail') is-invalid @enderror"
+                                type="text" name="thumbnail" style="width: 100%"
+                                value="{{ old('thumbnail') ?? $thumbnail }}" placeholder="Thumbnail..." spellcheck="false">
+                        </div>
+                        <div class="col-2">
+                            <span class="input-group-btn block">
+                                <a id="lfm" data-input="thumbnail" data-preview="holder"
+                                    class="btn btn-primary btn-block">
+                                    <i class="fa fa-picture-o"></i> Choose
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                    <div id="holder" style="margin-top:15px;max-height:150px;"></div>
+                    @error('thumbnail')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
                 <div class="form-group">
                     <label for="summernote">Content</label>
                     <textarea id="summernote" name="content" class="form-control @error('content') is-invalid @enderror"
@@ -69,6 +91,17 @@
             });
         });
         $('#lfm').filemanager('image');
+
+        let thumbnail = document.querySelector('#thumbnail');
+        let holder = document.querySelector('#holder');
+
+        let img_thumbnail = document.createElement("img");
+
+        if (thumbnail.value != '') {
+            img_thumbnail.src = thumbnail.value;
+            img_thumbnail.style.height = "5rem";
+            holder.appendChild(img_thumbnail);
+        }
     </script>
 @endsection
 

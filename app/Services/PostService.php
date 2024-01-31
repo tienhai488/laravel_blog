@@ -34,7 +34,7 @@ class PostService
         return $posts->get();
     }
 
-    public function handleContent($content)
+    public function handleContent(Post $post, $content)
     {
         $dom = new DOMDocument();
 
@@ -45,40 +45,45 @@ class PostService
         foreach ($images as $key => $img) {
             if (strpos($img->getAttribute('src'), 'data:image') === 0) {
                 $data = base64_decode(explode(',', explode(';', $img->getAttribute('src'))[1])[1]);
-                $image_name = '/storage/upload/' . time() . $key . '.png';
-                file_put_contents(public_path() . $image_name, $data);
+                $image_name = time() . $key;
+
+                $mediaItem = $post
+                    ->addMediaFromString($data)
+                    ->usingFileName($image_name)
+                    ->toMediaCollection('images', 'public');
 
                 $img->removeAttribute('src');
-                $img->setAttribute('src', $image_name);
+                $url = $mediaItem->getUrl();
+                $img->setAttribute('src', parse_url($url)['path']);
             }
         }
-        return $dom->saveHTML();
+        $content = $dom->saveHTML();
+        $post->content = $content;
+        $post->save();
     }
 
-    public function addPost($dataPost)
+    public function addPost($dataPost, $thumbnail)
     {
         $post = Post::create($dataPost);
-        if (empty($post)) {
-            return false;
-        }
-
         $post
-            ->addMediaFromRequest("thumbnail")
-            ->toMediaCollection();
-        return true;
+            ->addMedia(public_path("") . $thumbnail)
+            ->usingName($post->slug)
+            ->toMediaCollection("thumbnail");
+
+        return $post;
     }
 
-    public function updatePost(Post $post, $dataUpdate)
+    public function updatePost(Post $post, $dataUpdate, $thumbnail)
     {
-        $result = $post->update($dataUpdate);
-
-        $post->clearMediaCollection();
-
-        $post
-            ->addMediaFromRequest("thumbnail")
-            ->toMediaCollection();
-
-        return $result;
+        $post->update($dataUpdate);
+        if ($post->getFirstMediaUrl('thumbnail') != $thumbnail) {
+            $post->clearMediaCollection('thumbnail');
+            $post
+                ->addMedia(public_path("") . $thumbnail)
+                ->usingName($post->slug)
+                ->toMediaCollection("thumbnail");
+        }
+        return $post;
     }
 
     public function sendMailChangePostStatus(Post $post = null, $checkSendMail = false)

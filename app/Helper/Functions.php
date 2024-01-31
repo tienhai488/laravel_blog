@@ -16,11 +16,11 @@ use Illuminate\Support\Facades\Mail;
 function getButtonPostStatus(Post $post)
 {
     $type = '';
-    if ($post->isPending()) {
+    if ($post->isPending($post->id)) {
         $type = 'warning';
-    } else if ($post->isApproved()) {
+    } else if ($post->isApproved($post->id)) {
         $type = 'primary';
-    } else if ($post->isDenied()) {
+    } else if ($post->isDenied($post->id)) {
         $type = 'danger';
     }
     echo '<button class="btn btn-' . $type . '">' . PostStatusEnum::getDescription($post->status) . '</button>';
@@ -29,13 +29,13 @@ function getButtonPostStatus(Post $post)
 function getButtonUserStatus(User $user)
 {
     $type = '';
-    if ($user->isPending()) {
+    if ($user->isPending($user->id)) {
         $type = 'warning';
-    } else if ($user->isApproved()) {
+    } else if ($user->isApproved($user->id)) {
         $type = 'primary';
-    } else if ($user->isDenied()) {
+    } else if ($user->isDenied($user->id)) {
         $type = 'info';
-    } else if ($user->isLocked()) {
+    } else if ($user->isLocked($user->id)) {
         $type = 'danger';
     }
     echo '<button class="btn btn-' . $type . '">' . UserStatusEnum::getDescription($user->status) . '</button>';
@@ -44,11 +44,11 @@ function getButtonUserStatus(User $user)
 function sendMailChangePostStatus(Post $post)
 {
     $message = '';
-    if ($post->isPending()) {
+    if ($post->isPending($post->id)) {
         $message = 'đã chuyển về trạng thái chờ phê duyệt';
-    } else if ($post->isApproved()) {
+    } else if ($post->isApproved($post->id)) {
         $message = 'đã được phê duyệt';
-    } else if ($post->isDenied()) {
+    } else if ($post->isDenied($post->id)) {
         $message = 'không được phê duyệt';
     }
     $content = [

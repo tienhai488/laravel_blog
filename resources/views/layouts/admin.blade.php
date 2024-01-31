@@ -127,6 +127,8 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="{{ asset('assets/admin/dist/js/pages/dashboard.js') }}"></script>
 
+    <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
+
     @yield('script')
 
 </body>

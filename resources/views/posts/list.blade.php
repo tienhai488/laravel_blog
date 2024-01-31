@@ -51,7 +51,8 @@
                                                                 href="{{ route('posts.show', ['post' => $item]) }}">{{ $item->title }}</a>
                                                         </td>
                                                         <td>
-                                                            <img style="width: 200px" src="{{ $item->thumbnail }}"
+                                                            <img style="width: 200px"
+                                                                src="{{ $item->getFirstMediaUrl('thumbnail') }}"
                                                                 alt="{{ $item->slug }}">
                                                         </td>
                                                         <td class="text-center">
@@ -66,13 +67,6 @@
                                                             @endif
                                                         </td>
                                                         <td> {{ $item->created_at }} </td>
-
-                                                        {{-- <td class="text-center">
-                                                            <a href="{{ route('posts.show', ['post' => $item]) }}"
-                                                                class="btn btn-primary">
-                                                                <i class="far fa-file-alt"></i>
-                                                            </a>
-                                                        </td> --}}
                                                         <td class="text-center">
                                                             <a href="{{ route('posts.edit', ['post' => $item]) }}"
                                                                 class="btn btn-warning">

@@ -47,19 +47,19 @@ class Post extends Model implements HasMedia
         return $this->morphMany(config('media-library.media_model'), 'model');
     }
 
-    public function scopeIsPending($query)
+    public function scopeIsPending($query, $post_id)
     {
-        return $query->where('status', PostStatusEnum::PENDING)->exists();
+        return $query->where('id', $post_id)->where('status', PostStatusEnum::PENDING)->exists();
     }
 
-    public function scopeIsApproved($query)
+    public function scopeIsApproved($query, $post_id)
     {
-        return $query->where('status', PostStatusEnum::APPROVED)->exists();
+        return $query->where('id', $post_id)->where('status', PostStatusEnum::APPROVED)->exists();
     }
 
-    public function scopeIsDenied($query)
+    public function scopeIsDenied($query, $post_id)
     {
-        return $query->where('status', PostStatusEnum::DENIED)->exists();
+        return $query->where('id', $post_id)->where('status', PostStatusEnum::DENIED)->exists();
     }
 
     protected $fillable = [
@@ -69,5 +69,6 @@ class Post extends Model implements HasMedia
         'description',
         'content',
         'publish_date',
+        'user_id',
     ];
 }

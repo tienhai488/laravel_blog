@@ -8,17 +8,13 @@ class UserService
 {
     public function getAllUser($filter = [])
     {
-        if (empty($filter)) {
-            return User::all();
-        }
-
         $condition = '';
         if ($filter['name'] != '') {
             $name = $filter['name'];
             if ($condition != '') {
                 $condition .= ' and ';
             }
-            $condition .= "last_name || ' ' || first_name like '%$name%'";
+            $condition .= "CONCAT_WS(' ', last_name, first_name) like '%$name%'";
         }
 
         if ($filter['email'] != '') {
@@ -34,7 +30,13 @@ class UserService
             if ($condition != '') {
                 $condition .= ' and ';
             }
-            $condition .= "status =  $status";
+            $condition .= 'status =  ' . $status;
+        }
+
+        // dd($condition);
+
+        if ($condition == '') {
+            return User::all();
         }
 
         return User::WhereRaw($condition)->get();

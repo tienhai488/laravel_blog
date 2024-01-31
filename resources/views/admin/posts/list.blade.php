@@ -17,11 +17,11 @@
                                 <div class="row">
                                     <div class="col-4">
                                         <input type="text" class="form-control" value="{{ request()->title }}"
-                                            name="title" placeholder="Nhập tiêu cần tìm kiếm...">
+                                            name="title" placeholder="Nhập tiêu cần tìm kiếm..." spellcheck="false">
                                     </div>
                                     <div class="col-4">
                                         <input type="text" class="form-control" value="{{ request()->email }}"
-                                            name="email" placeholder="Nhập email cần tìm kiếm ...">
+                                            name="email" placeholder="Nhập email cần tìm kiếm ..." spellcheck="false">
                                     </div>
                                     <div class="col-2">
                                         <select name="status" class="form-control">
@@ -67,7 +67,8 @@
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <img style="width: 200px" src="{{ $item->thumbnail }}"
+                                                            <img style="width: 200px"
+                                                                src="{{ $item->getFirstMediaUrl('thumbnail') }}"
                                                                 alt="{{ $item->slug }}">
                                                         </td>
                                                         <td>

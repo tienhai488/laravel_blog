@@ -17,11 +17,11 @@
                                 <div class="row">
                                     <div class="col-4">
                                         <input type="text" class="form-control" value="{{ request()->name }}"
-                                            name="name" placeholder="Nhập tên cần tìm kiếm...">
+                                            name="name" placeholder="Nhập tên cần tìm kiếm..." spellcheck="false">
                                     </div>
                                     <div class="col-4">
                                         <input type="text" class="form-control" value="{{ request()->email }}"
-                                            name="email" placeholder="Nhập email cần tìm kiếm ...">
+                                            name="email" placeholder="Nhập email cần tìm kiếm ..." spellcheck="false">
                                     </div>
                                     <div class="col-2">
                                         <select name="status" class="form-control">

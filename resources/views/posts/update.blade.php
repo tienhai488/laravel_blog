@@ -27,12 +27,11 @@
 
                 <div class="form-group">
                     <label for="thumbnail">Thumnail</label>
-                    <input type="file" class="form-control" name="thumbnail" value="">
-                    {{-- <div class="input-group row">
+                    <div class="input-group row">
                         <div class="col-10">
                             <input id="thumbnail" class="form-control @error('thumbnail') is-invalid @enderror"
                                 type="text" name="thumbnail" style="width: 100%"
-                                value="{{ old('thumbnail') ?? $post->thumbnail }}" placeholder="Thumbnail...">
+                                value="{{ old('thumbnail') ?? $thumbnail }}" placeholder="Thumbnail..." spellcheck="false">
                         </div>
                         <div class="col-2">
                             <span class="input-group-btn block">
@@ -42,8 +41,8 @@
                                 </a>
                             </span>
                         </div>
-                    </div> --}}
-                    {{-- <div id="holder" style="margin-top:15px;max-height:150px;"></div> --}}
+                    </div>
+                    <div id="holder" style="margin-top:15px;max-height:150px;"></div>
                     @error('thumbnail')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -76,6 +75,17 @@
             });
         });
         $('#lfm').filemanager('image');
+
+        let thumbnail = document.querySelector('#thumbnail');
+        let holder = document.querySelector('#holder');
+
+        let img_thumbnail = document.createElement("img");
+
+        if (thumbnail.value != '') {
+            img_thumbnail.src = thumbnail.value;
+            img_thumbnail.style.height = "5rem";
+            holder.appendChild(img_thumbnail);
+        }
     </script>
 @endsection
 
