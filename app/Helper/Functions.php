@@ -16,40 +16,57 @@ use Illuminate\Support\Facades\Mail;
 function getButtonPostStatus(Post $post)
 {
     $type = '';
-    if ($post->isPending($post->id)) {
-        $type = 'warning';
-    } else if ($post->isApproved($post->id)) {
-        $type = 'primary';
-    } else if ($post->isDenied($post->id)) {
-        $type = 'danger';
+    switch ($post->status) {
+        case PostStatusEnum::PENDING:
+            $type = 'warning';
+            break;
+        case PostStatusEnum::APPROVED:
+            $type = 'primary';
+            break;
+        case PostStatusEnum::DENIED:
+            $type = 'danger';
+            break;
+        default:
     }
-    echo '<button class="btn btn-' . $type . '">' . PostStatusEnum::getDescription($post->status) . '</button>';
+    return '<button class="btn btn-' . $type . '">' . PostStatusEnum::getDescription($post->status) . '</button>';
 }
 
 function getButtonUserStatus(User $user)
 {
     $type = '';
-    if ($user->isPending($user->id)) {
-        $type = 'warning';
-    } else if ($user->isApproved($user->id)) {
-        $type = 'primary';
-    } else if ($user->isDenied($user->id)) {
-        $type = 'info';
-    } else if ($user->isLocked($user->id)) {
-        $type = 'danger';
+    switch ($user->status) {
+        case UserStatusEnum::PENDING:
+            $type = 'warning';
+            break;
+        case UserStatusEnum::APPROVED:
+            $type = 'primary';
+            break;
+        case UserStatusEnum::DENIED:
+            $type = 'info';
+            break;
+        case UserStatusEnum::LOCKED:
+            $type = 'danger';
+            break;
+        default:
     }
-    echo '<button class="btn btn-' . $type . '">' . UserStatusEnum::getDescription($user->status) . '</button>';
+
+    return '<button class="btn btn-' . $type . '">' . UserStatusEnum::getDescription($user->status) . '</button>';
 }
 
 function sendMailChangePostStatus(Post $post)
 {
     $message = '';
-    if ($post->isPending($post->id)) {
-        $message = 'đã chuyển về trạng thái chờ phê duyệt';
-    } else if ($post->isApproved($post->id)) {
-        $message = 'đã được phê duyệt';
-    } else if ($post->isDenied($post->id)) {
-        $message = 'không được phê duyệt';
+    switch ($post->status) {
+        case PostStatusEnum::PENDING:
+            $message = 'đã chuyển về trạng thái chờ phê duyệt';
+            break;
+        case PostStatusEnum::APPROVED:
+            $message = 'đã được phê duyệt';
+            break;
+        case PostStatusEnum::DENIED:
+            $message = 'không được phê duyệt';
+            break;
+        default:
     }
     $content = [
         'subject' => 'Thông báo thay đổi trạng thái bài viết!',

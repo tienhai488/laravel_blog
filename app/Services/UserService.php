@@ -8,25 +8,26 @@ class UserService
 {
     public function getAllUser($filter = [])
     {
+        $name = $filter["name"] ?? "";
+        $email = $filter["email"] ?? "";
+        $status = $filter["status"] ?? "";
+
         $condition = '';
-        if ($filter['name'] != '') {
-            $name = $filter['name'];
+        if ($name != '') {
             if ($condition != '') {
                 $condition .= ' and ';
             }
             $condition .= "CONCAT_WS(' ', last_name, first_name) like '%$name%'";
         }
 
-        if ($filter['email'] != '') {
-            $email = $filter['email'];
+        if ($email != '') {
             if ($condition != '') {
                 $condition .= ' and ';
             }
             $condition .= "email like '%$email%'";
         }
 
-        if ($filter['status'] != '') {
-            $status = $filter['status'];
+        if ($status != '') {
             if ($condition != '') {
                 $condition .= ' and ';
             }
@@ -50,5 +51,32 @@ class UserService
     public function handleDeleteAllPost(User $user)
     {
         return $user->posts()->delete();
+    }
+
+    public function filterData($name, $email, $status)
+    {
+        $condition = '';
+        if ($name != '') {
+            if ($condition != '') {
+                $condition .= ' and ';
+            }
+            $condition .= "CONCAT_WS(' ', last_name, first_name) like '%$name%'";
+        }
+
+        if ($email != '') {
+            if ($condition != '') {
+                $condition .= ' and ';
+            }
+            $condition .= "email like '%$email%'";
+        }
+
+        if ($status != '') {
+            if ($condition != '') {
+                $condition .= ' and ';
+            }
+            $condition .= 'status =  ' . $status;
+        }
+
+        return $condition ?  User::WhereRaw($condition) : User::query();
     }
 }

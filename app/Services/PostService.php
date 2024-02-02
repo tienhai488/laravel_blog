@@ -15,20 +15,23 @@ class PostService
             return Post::all();
         }
 
+        $title = $filter['title'] ?? '';
+        $email = $filter['email'] ?? '';
+        $status = $filter['status'] ?? '';
+
         $posts = Post::with('user');
-        if ($filter['title'] != '') {
-            $posts = $posts->where('title', 'like', '%' . $filter['title'] . '%');
+        if ($title != '') {
+            $posts = $posts->where('title', 'like', '%' . $title . '%');
         }
 
-        if ($filter['email'] != '') {
-            $email = $filter['email'];
+        if ($email != '') {
             $posts = $posts->whereHas('user', function ($query) use ($email) {
                 $query->where('email', 'like', '%' . $email . '%');
             });
         }
 
-        if ($filter['status'] != '') {
-            $posts = $posts->where('status', $filter['status']);
+        if ($status != '') {
+            $posts = $posts->where('status', $status);
         }
 
         return $posts->get();
@@ -92,5 +95,24 @@ class PostService
             $job = (new SendMailChangePostStatus($post))->delay(Carbon::now()->addSeconds(10));
             dispatch($job);
         }
+    }
+
+    public function filterData($title, $email, $status)
+    {
+        $posts = Post::with('user');
+        if ($title != '') {
+            $posts = $posts->where('title', 'like', '%' . $title . '%');
+        }
+
+        if ($email != '') {
+            $posts = $posts->whereHas('user', function ($query) use ($email) {
+                $query->where('email', 'like', '%' . $email . '%');
+            });
+        }
+
+        if ($status != '') {
+            $posts = $posts->where('status', $status);
+        }
+        return $posts;
     }
 }

@@ -28,7 +28,7 @@
                                     </a>
                                 </div>
                                 <div class="card-body">
-                                    <table id="example2" class="table table-bordered table-hover ">
+                                    <table id="datatable" class="table table-bordered table-hover ">
                                         <thead>
                                             <tr>
                                                 <th>Title</th>
@@ -37,54 +37,10 @@
                                                 <th>Description</th>
                                                 <th>Publish Date</th>
                                                 <th>Created Date</th>
-                                                {{-- <th>Show</th> --}}
                                                 <th>Edit</th>
                                                 <th>Delete</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @if ($posts->count() > 0)
-                                                @foreach ($posts as $key => $item)
-                                                    <tr>
-                                                        <td>
-                                                            <a
-                                                                href="{{ route('posts.show', ['post' => $item]) }}">{{ $item->title }}</a>
-                                                        </td>
-                                                        <td>
-                                                            <img style="width: 200px"
-                                                                src="{{ $item->getFirstMediaUrl('thumbnail') }}"
-                                                                alt="{{ $item->slug }}">
-                                                        </td>
-                                                        <td class="text-center">
-                                                            {{ getButtonPostStatus($item) }}
-                                                        </td>
-                                                        <td>{{ $item->description }}</td>
-                                                        <td>
-                                                            @if (empty($item->publish_date))
-                                                                {{ 'PENDING' }}
-                                                            @else
-                                                                @datetime($item->publish_date)
-                                                            @endif
-                                                        </td>
-                                                        <td> {{ $item->created_at }} </td>
-                                                        <td class="text-center">
-                                                            <a href="{{ route('posts.edit', ['post' => $item]) }}"
-                                                                class="btn btn-warning">
-                                                                <i class="far fa-edit"></i>
-                                                            </a>
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <a href="{{ route('posts.destroy', ['post' => $item]) }}"
-                                                                class="btn btn-danger" data-confirm-delete="true">
-                                                                <i style="pointer-events: none" class="fas fa-trash">
-                                                                </i>
-                                                            </a>
-
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
-                                        </tbody>
                                         <tfoot>
                                             <tr>
                                                 <th>Title</th>
@@ -93,7 +49,6 @@
                                                 <th>Description</th>
                                                 <th>Publish Date</th>
                                                 <th>Created Date</th>
-                                                {{-- <th>Show</th> --}}
                                                 <th>Edit</th>
                                                 <th>Delete</th>
                                             </tr>
@@ -111,23 +66,43 @@
 
 @section('script')
     <script>
-        $(function() {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "pageLength": 3,
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
+        let dataTable = new DataTable('#datatable', {
+            ajax: '{{ route('admin.posts.data_client') }}',
+            order: [
+                [5, 'desc']
+            ],
+            ordering: false,
+            processing: true,
+            serverSide: true,
+            searching: false,
+            pageLength: 2,
+            paging: true,
+            lengthChange: true,
+            columns: [{
+                    data: "title"
+                },
+                {
+                    data: "thumbnail"
+                },
+                {
+                    data: "status"
+                },
+                {
+                    data: "description"
+                },
+                {
+                    data: "publish_date"
+                },
+                {
+                    data: "created_at"
+                },
+                {
+                    data: "edit"
+                },
+                {
+                    data: "delete"
+                },
+            ],
         });
     </script>
 @endsection

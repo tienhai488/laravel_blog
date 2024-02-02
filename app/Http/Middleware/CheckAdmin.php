@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Enum\UserRoleEnum;
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,10 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckAdmin
 {
+    protected User $user;
     public function handle(Request $request, Closure $next): Response
     {
-        $user = Auth::user();
-        if($user->role != UserRoleEnum::ADMIN){
+        $this->user = Auth::user();
+        if (!$this->user->isAdmin()) {
             abort(404);
         }
         return $next($request);

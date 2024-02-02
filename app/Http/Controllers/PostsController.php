@@ -12,21 +12,22 @@ use RealRashid\SweetAlert\Facades\Alert;
 class PostsController extends Controller
 {
     protected PostService $postService;
+    protected $user;
 
     public function __construct()
     {
         $this->postService = new PostService();
+        $this->middleware("check_author_post")->except(['index', 'create', 'store']);
+        $this->user = Auth::user();
     }
 
     public function index()
     {
         $title = 'Danh sách bài viết ';
-        $user = Auth::user();
-        $posts = $user->posts;
         $titleDelete = 'Delete Post!';
         $textDelete = 'Are you sure you want to delete?';
         confirmDelete($titleDelete, $textDelete);
-        return view('posts.list', compact('title', 'posts'));
+        return view('posts.list', compact('title'));
     }
 
     /**

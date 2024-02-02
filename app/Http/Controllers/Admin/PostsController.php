@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
+use App\Models\User;
 use App\Services\PostService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class PostsController extends Controller
 {
@@ -79,7 +82,7 @@ class PostsController extends Controller
             'description' => $request->description,
         ];
 
-        if ($post->isApproved($post)) {
+        if ($post->isApproved()) {
             $dataUpdate['publish_date'] = date('Y-m-d H:i:s');
         } else {
             $dataUpdate['publish_date'] = null;
@@ -92,5 +95,100 @@ class PostsController extends Controller
         $this->postService->sendMailChangePostStatus($post, $checkSendMail);
 
         return to_route('admin.posts.index')->with('message', 'Cập nhật bài viết thành công!');
+    }
+
+    public function data(Request $request)
+    {
+        if (!$request->ajax()) {
+            abort(404);
+        }
+
+        $title = $request->title ?? '';
+        $email = $request->email ?? '';
+        $status = $request->status ?? '';
+
+        $posts = $this->postService->filterData($title, $email, $status);
+
+        return DataTables::of($posts)
+            ->editColumn('thumbnail', function ($post) {
+                $thumbnail = $post->getFirstMediaUrl('thumbnail');
+                $slug = $post->slug;
+                return '<img style="width: 200px"
+                src="' . $thumbnail . '"
+                alt="' . $slug . '">';
+            })
+            ->editColumn('author', function ($post) {
+                return $post->user->name . ' (' . $post->user->email . ')';
+            })
+            ->editColumn('status', function (Post $post) {
+                return getButtonPostStatus($post);
+            })
+            ->editColumn('publish_date', function ($post) {
+                if (empty($post->publish_date))
+                    return 'PENDING';
+                return Carbon::parse($post->publish_date)->format('Y/m/d H:i:s');
+            })
+            ->editColumn('created_at', function ($post) {
+                return Carbon::parse($post->created_at)->format('Y/m/d H:i:s');
+            })
+            ->editColumn('show', function ($post) {
+                return '<a href="' . route('posts.show', $post) . '" class="btn btn-primary">
+                    <i class="far fa-file-alt"></i>
+                </a>';
+            })
+            ->editColumn('edit', function ($post) {
+                return '<a href="' . route('admin.posts.update', $post) . '" class="btn btn-warning">
+                    <i class="far fa-edit"></i>
+                </a>';
+            })
+            ->rawColumns(['thumbnail', 'status', 'show', 'edit'])
+            ->toJson();
+    }
+
+    public function dataClient(Request $request)
+    {
+        if (!$request->ajax()) {
+            abort(404);
+        }
+
+        $posts = Auth::user()->posts();
+
+        return DataTables::of($posts)
+            ->editColumn('title', function ($post) {
+                return '<a
+                href="' . route('posts.show', $post) . '">' . $post->title . '</a>';
+            })
+            ->editColumn('thumbnail', function ($post) {
+                $thumbnail = $post->getFirstMediaUrl('thumbnail');
+                $slug = $post->slug;
+                return '<img style="width: 200px"
+                src="' . $thumbnail . '"
+                alt="' . $slug . '">';
+            })
+            ->editColumn('status', function (Post $post) {
+                return getButtonPostStatus($post);
+            })
+            ->editColumn('publish_date', function ($post) {
+                if (empty($post->publish_date))
+                    return 'PENDING';
+                return Carbon::parse($post->publish_date)->format('Y/m/d H:i:s');
+            })
+            ->editColumn('created_at', function ($post) {
+                return Carbon::parse($post->created_at)->format('Y/m/d H:i:s');
+            })
+            ->editColumn('edit', function ($post) {
+                return '<a href="' . route('posts.update', $post) . '" class="btn btn-warning">
+                    <i class="far fa-edit"></i>
+                </a>';
+            })
+            ->editColumn('delete', function ($post) {
+                return '<a href="' . route('posts.destroy', $post) . '" class="btn btn-danger" data-confirm-delete="true">
+                    <i style="pointer-events: none"
+                    class="fas fa-trash">
+                    </i>
+                </a>';
+            })
+            ->rawColumns(['title', 'thumbnail', 'status', 'edit', 'delete'])
+            ->toJson();
     }
 }

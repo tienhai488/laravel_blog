@@ -7,10 +7,12 @@ use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\UserProfileRequest;
 use App\Models\User;
 use App\Services\UserService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class UsersController extends Controller
 {
@@ -121,5 +123,36 @@ class UsersController extends Controller
             return back()->with('message', 'Thay đổi mật khẩu thành công!');
         }
         return back()->with('message', 'Thay đổi mật khẩu không thành công!');
+    }
+
+    public function data(Request $request)
+    {
+        if (!$request->ajax()) {
+            abort(404);
+        }
+
+        $name = $request->name ?? '';
+        $email = $request->email ?? '';
+        $status = $request->status ?? '';
+
+        $users = $this->userService->filterData($name, $email, $status);
+
+        return DataTables::of($users)
+            ->editColumn('name', function (User $user) {
+                return $user->name;
+            })
+            ->editColumn('status', function (User $user) {
+                return getButtonUserStatus($user);
+            })
+            ->editColumn('created_at', function ($user) {
+                return Carbon::parse($user->created_at)->format('Y/m/d H:i:s');
+            })
+            ->editColumn('edit', function ($user) {
+                return '<a href="' . route('admin.users.update', $user) . '" class="btn btn-warning">
+                    <i class="far fa-edit"></i>
+                </a>';
+            })
+            ->rawColumns(['status', 'edit'])
+            ->toJson();
     }
 }

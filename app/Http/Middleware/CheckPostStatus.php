@@ -17,7 +17,7 @@ class CheckPostStatus
     public function handle(Request $request, Closure $next): Response
     {
         $post = $request->route("post");
-        if($post->status != PostStatusEnum::APPROVED){
+        if (!$post->isApproved()) {
             abort(404);
         }
         return $next($request);

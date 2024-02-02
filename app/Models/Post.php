@@ -47,19 +47,19 @@ class Post extends Model implements HasMedia
         return $this->morphMany(config('media-library.media_model'), 'model');
     }
 
-    public function scopeIsPending($query, $post_id)
+    public function isPending()
     {
-        return $query->where('id', $post_id)->where('status', PostStatusEnum::PENDING)->exists();
+        return $this->status == PostStatusEnum::PENDING;
     }
 
-    public function scopeIsApproved($query, $post_id)
+    public function isApproved()
     {
-        return $query->where('id', $post_id)->where('status', PostStatusEnum::APPROVED)->exists();
+        return $this->status == PostStatusEnum::APPROVED;
     }
 
-    public function scopeIsDenied($query, $post_id)
+    public function isDenied()
     {
-        return $query->where('id', $post_id)->where('status', PostStatusEnum::DENIED)->exists();
+        return $this->status == PostStatusEnum::DENIED;
     }
 
     protected $fillable = [

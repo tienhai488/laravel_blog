@@ -34,6 +34,8 @@ Route::prefix('/admin')->middleware(['auth', 'check_user_status', 'check_admin']
         Route::get('/update/{user}', [AdminUsersController::class, 'update'])->name('update');
 
         Route::put('/update/{user}', [AdminUsersController::class, 'postUpdate'])->name('post_update');
+
+        Route::get("/data", [AdminUsersController::class, 'data'])->name('data');
     });
 
     // posts
@@ -43,6 +45,10 @@ Route::prefix('/admin')->middleware(['auth', 'check_user_status', 'check_admin']
         Route::get('/update/{post}', [AdminPostsController::class, 'update'])->name('update');
 
         Route::put('/update/{post}', [AdminPostsController::class, 'postUpdate'])->name("post_update");
+
+        Route::get("/data", [AdminPostsController::class, 'data'])->name('data');
+
+        Route::get('/data-client', [AdminPostsController::class, 'dataClient'])->name('data_client');
     });
 });
 

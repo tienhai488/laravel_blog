@@ -21,15 +21,20 @@ class CheckUserStatus
 
         $check = true;
         $message = '';
-        if ($this->user->isPending($this->user->id)) {
-            $check = false;
-            $message = 'Tài khoản của bạn chưa được phê duyệt, không thể đăng nhập ngay lúc này!';
-        } else if ($this->user->isDenied($this->user->id)) {
-            $check = false;
-            $message = 'Tài khoản của bạn đã bị từ chối liên hệ chúng tôi để biết thêm chi tiết!';
-        } else if ($this->user->isLocked($this->user->id)) {
-            $check = false;
-            $message = 'Tài khoản của bạn đã bị khóa!';
+        switch ($this->user->status) {
+            case UserStatusEnum::PENDING:
+                $check = false;
+                $message = 'Tài khoản của bạn chưa được phê duyệt, không thể đăng nhập ngay lúc này!';
+                break;
+            case UserStatusEnum::DENIED:
+                $check = false;
+                $message = 'Tài khoản của bạn đã bị từ chối liên hệ chúng tôi để biết thêm chi tiết!';
+                break;
+            case UserStatusEnum::LOCKED:
+                $check = false;
+                $message = 'Tài khoản của bạn đã bị khóa!';
+                break;
+            default:
         }
 
         if ($check) {

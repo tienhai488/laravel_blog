@@ -33,24 +33,29 @@ class User extends Authenticatable
         'status' => UserStatusEnum::class,
     ];
 
-    public function scopeIsPending($query, $user_id)
+    public function isPending()
     {
-        return $query->where('id', $user_id)->where('status', UserStatusEnum::PENDING)->exists();
+        return $this->status == UserStatusEnum::PENDING;
     }
 
-    public function scopeIsApproved($query, $user_id)
+    public function isApproved()
     {
-        return $query->where('id', $user_id)->where('status', UserStatusEnum::APPROVED)->exists();
+        return $this->status == UserStatusEnum::APPROVED;
     }
 
-    public function scopeIsDenied($query, $user_id)
+    public function isDenied()
     {
-        return $query->where('id', $user_id)->where('status', UserStatusEnum::DENIED)->exists();
+        return $this->status == UserStatusEnum::DENIED;
     }
 
-    public function scopeIsLocked($query, $user_id)
+    public function isLocked()
     {
-        return $query->where('id', $user_id)->where('status', UserStatusEnum::LOCKED)->exists();
+        return $this->status == UserStatusEnum::LOCKED;
+    }
+
+    public function isAdmin()
+    {
+        return $this->role == UserRoleEnum::ADMIN;
     }
 
     protected $fillable = [

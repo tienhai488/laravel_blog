@@ -16,15 +16,17 @@
                             <form action="{{ route('admin.posts.index') }}" class="mb-3">
                                 <div class="row">
                                     <div class="col-4">
-                                        <input type="text" class="form-control" value="{{ request()->title }}"
-                                            name="title" placeholder="Nhập tiêu cần tìm kiếm..." spellcheck="false">
+                                        <input id="title" type="text" class="form-control"
+                                            value="{{ request()->title }}" name="title"
+                                            placeholder="Nhập tiêu cần tìm kiếm..." spellcheck="false">
                                     </div>
                                     <div class="col-4">
-                                        <input type="text" class="form-control" value="{{ request()->email }}"
-                                            name="email" placeholder="Nhập email cần tìm kiếm ..." spellcheck="false">
+                                        <input id="email" type="text" class="form-control"
+                                            value="{{ request()->email }}" name="email"
+                                            placeholder="Nhập email cần tìm kiếm ..." spellcheck="false">
                                     </div>
                                     <div class="col-2">
-                                        <select name="status" class="form-control">
+                                        <select id="status" name="status" class="form-control">
                                             <option value="">Tất cả trạng thái</option>
                                             @foreach (array_column(\App\Enum\PostStatusEnum::cases(), 'value') as $status)
                                                 <option value="{{ $status }}" @selected("$status" == request()->status)>
@@ -34,7 +36,7 @@
                                         </select>
                                     </div>
                                     <div class="col-2">
-                                        <button class="btn btn-primary btn-block">
+                                        <button class="btn btn-primary btn-block btn-filter">
                                             Tìm kiếm
                                         </button>
                                     </div>
@@ -43,7 +45,7 @@
                             <hr>
                             <div class="card">
                                 <div class="card-body">
-                                    <table id="example2" class="table table-bordered table-hover ">
+                                    <table id="datatable" class="table table-bordered table-hover ">
                                         <thead>
                                             <tr>
                                                 <th>Title</th>
@@ -57,51 +59,6 @@
                                                 <th>Edit</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @if ($posts->count() > 0)
-                                                @foreach ($posts as $key => $item)
-                                                    <tr>
-                                                        <td>
-                                                            <a href="{{ route('posts.show', ['post' => $item]) }}">
-                                                                {{ $item->title }}
-                                                            </a>
-                                                        </td>
-                                                        <td>
-                                                            <img style="width: 200px"
-                                                                src="{{ $item->getFirstMediaUrl('thumbnail') }}"
-                                                                alt="{{ $item->slug }}">
-                                                        </td>
-                                                        <td>
-                                                            {{ $item->user->name }} ({{ $item->user->email }})
-                                                        </td>
-                                                        <td class="text-center">
-                                                            {{ getButtonPostStatus($item) }}
-                                                        </td>
-                                                        <td>{{ $item->description }}</td>
-                                                        <td>
-                                                            @if (empty($item->publish_date))
-                                                                {{ 'PENDING' }}
-                                                            @else
-                                                                @datetime($item->publish_date)
-                                                            @endif
-                                                        </td>
-                                                        <td> {{ $item->created_at }} </td>
-                                                        <td class="text-center">
-                                                            <a href="{{ route('posts.show', ['post' => $item]) }}"
-                                                                class="btn btn-primary">
-                                                                <i class="far fa-file-alt"></i>
-                                                            </a>
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <a href="{{ route('admin.posts.update', ['post' => $item]) }}"
-                                                                class="btn btn-warning">
-                                                                <i class="far fa-edit"></i>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
-                                        </tbody>
                                         <tfoot>
                                             <tr>
                                                 <th>Title</th>
@@ -128,23 +85,117 @@
 
 @section('script')
     <script>
-        $(function() {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "pageLength": 3,
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
+        function fetch(title, email, status) {
+            $.ajax({
+                url: "{{ route('admin.posts.data') }}",
+                type: "GET",
+                data: {
+                    'title': title,
+                    'email': email,
+                    'status': status,
+                },
+                dataType: "json",
+                success: function(data) {
+                    initTable(data.data);
+                    // $('#datatable').DataTable({
+                    //     data: data,
+                    //     responsive: true,
+                    //     processing: true,
+                    //     serverSide: true,
+                    //     searching: false,
+                    //     pageLength: 1,
+                    //     paging: true,
+                    //     lengthChange: true,
+                    //     columns: [{
+                    //             data: "title",
+                    //             "render": function(data, type, row, meta) {
+                    //                 return "tienhai";
+                    //             }
+                    //         },
+                    //         {
+                    //             data: "thumbnail"
+                    //         },
+                    //         {
+                    //             data: "author"
+                    //         },
+                    //         {
+                    //             data: "status"
+                    //         },
+                    //         {
+                    //             data: "description"
+                    //         },
+                    //         {
+                    //             data: "publish_date"
+                    //         },
+                    //         {
+                    //             data: "created_at"
+                    //         },
+                    //         {
+                    //             data: "show"
+                    //         },
+                    //         {
+                    //             data: "edit"
+                    //         },
+                    //     ],
+                    // });
+
+                }
             });
+        }
+
+        let dataTable = new DataTable('#datatable', {
+            ajax: {
+                url: '{{ route('admin.posts.data') }}',
+                data: function(data) {
+                    data.title = $('#title').val();
+                    data.email = $('#email').val();
+                    data.status = $('#status').val();
+                },
+            },
+            order: [
+                [6, 'desc']
+            ],
+            ordering: false,
+            processing: true,
+            serverSide: true,
+            searching: false,
+            pageLength: 2,
+            paging: true,
+            lengthChange: true,
+            columns: [{
+                    data: "title"
+                },
+                {
+                    data: "thumbnail"
+                },
+                {
+                    data: "author"
+                },
+                {
+                    data: "status"
+                },
+                {
+                    data: "description"
+                },
+                {
+                    data: "publish_date"
+                },
+                {
+                    data: "created_at"
+                },
+                {
+                    data: "show"
+                },
+                {
+                    data: "edit"
+                },
+            ],
         });
+
+        let btnFilter = document.querySelector('.btn-filter');
+        btnFilter.onclick = (e) => {
+            e.preventDefault();
+            dataTable.ajax.reload();
+        }
     </script>
 @endsection
