@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
-class UsersController extends Controller
+class UserController extends Controller
 {
     protected UserService $userService;
 
@@ -34,7 +34,7 @@ class UsersController extends Controller
         $users = $this->userService->getAllUser($filter);
         $user = Auth::user();
         $title = 'Danh sách người dùng';
-        return view('admin.users.list', compact('title', 'user', 'users'));
+        return view('admin.users.index', compact('title', 'user', 'users'));
     }
 
     public function update(User $user)

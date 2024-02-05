@@ -8,7 +8,7 @@ use App\Services\UserService;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class UsersController extends Controller
+class UserController extends Controller
 {
     protected UserService $userService;
 

@@ -16,6 +16,6 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $title = 'Dashboard';
-        return view('admin.dashboard.dashboard', compact('title', 'user'));
+        return view('admin.dashboard.index', compact('title', 'user'));
     }
 }

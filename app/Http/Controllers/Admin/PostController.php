@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 
-class PostsController extends Controller
+class PostController extends Controller
 {
     protected PostService $postService;
 
@@ -38,7 +38,7 @@ class PostsController extends Controller
         $posts = $this->postService->getAllPost($filter);
         $user = Auth::user();
         $title = 'Danh sách bài viết';
-        return view('admin.posts.list', compact('title', 'posts', 'user'));
+        return view('admin.posts.index', compact('title', 'posts', 'user'));
     }
 
     /**

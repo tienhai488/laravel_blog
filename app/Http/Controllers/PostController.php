@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class PostsController extends Controller
+class PostController extends Controller
 {
     protected PostService $postService;
     protected $user;
@@ -27,7 +27,7 @@ class PostsController extends Controller
         $titleDelete = 'Delete Post!';
         $textDelete = 'Are you sure you want to delete?';
         confirmDelete($titleDelete, $textDelete);
-        return view('posts.list', compact('title'));
+        return view('posts.index', compact('title'));
     }
 
     /**
@@ -36,7 +36,7 @@ class PostsController extends Controller
     public function create()
     {
         $title = 'Thêm bài viết';
-        return view('posts.add', compact('title'));
+        return view('posts.create', compact('title'));
     }
 
     /**
@@ -82,7 +82,7 @@ class PostsController extends Controller
     {
         $thumbnail = $post->getFirstMediaUrl('thumbnail');
         $title = 'Cập nhật bài viết';
-        return view('posts.update', compact('title', 'post', 'thumbnail'));
+        return view('posts.edit', compact('title', 'post', 'thumbnail'));
     }
 
     public function update(PostRequest $request, Post $post)

@@ -1,54 +1,54 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\PostsController as AdminPostsController;
-use App\Http\Controllers\Admin\UsersController as AdminUsersController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\NewsController;
-use App\Http\Controllers\PostsController;
-use App\Http\Controllers\UsersController;
+use App\Http\Controllers\NewController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index'])->name('home')->middleware(['auth', 'check_user_status']);
+Route::get('/', [HomeController::class, 'home'])->name('home')->middleware(['auth', 'check_user_status']);
 
 // admin
 Route::prefix('/admin')->middleware(['auth', 'check_user_status', 'check_admin'])->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/profile', [AdminUsersController::class, 'profile'])->name('profile');
+    Route::get('/profile', [AdminUserController::class, 'profile'])->name('profile');
 
-    Route::post('/profile', [AdminUsersController::class, 'postProfile']);
+    Route::post('/profile', [AdminUserController::class, 'postProfile']);
 
-    Route::get('/change-password', [AdminUsersController::class, 'changePassword'])->name('change_password');
+    Route::get('/change-password', [AdminUserController::class, 'changePassword'])->name('change_password');
 
-    Route::post('/change-password', [AdminUsersController::class, 'postChangePassword']);
+    Route::post('/change-password', [AdminUserController::class, 'postChangePassword']);
 
     // users
     Route::prefix('/users')->name('users.')->group(function () {
-        Route::get('/', [AdminUsersController::class, 'index'])->name('index');
+        Route::get('/', [AdminUserController::class, 'index'])->name('index');
 
-        Route::get('/update/{user}', [AdminUsersController::class, 'update'])->name('update');
+        Route::get('/update/{user}', [AdminUserController::class, 'update'])->name('update');
 
-        Route::put('/update/{user}', [AdminUsersController::class, 'postUpdate'])->name('post_update');
+        Route::put('/update/{user}', [AdminUserController::class, 'postUpdate'])->name('post_update');
 
-        Route::get("/data", [AdminUsersController::class, 'data'])->name('data');
+        Route::get("/data", [AdminUserController::class, 'data'])->name('data');
     });
 
     // posts
     Route::prefix('/posts')->name('posts.')->group(function () {
-        Route::get('/', [AdminPostsController::class, 'index'])->name('index');
+        Route::get('/', [AdminPostController::class, 'index'])->name('index');
 
-        Route::get('/update/{post}', [AdminPostsController::class, 'update'])->name('update');
+        Route::get('/update/{post}', [AdminPostController::class, 'update'])->name('update');
 
-        Route::put('/update/{post}', [AdminPostsController::class, 'postUpdate'])->name("post_update");
+        Route::put('/update/{post}', [AdminPostController::class, 'postUpdate'])->name("post_update");
 
-        Route::get("/data", [AdminPostsController::class, 'data'])->name('data');
+        Route::get("/data", [AdminPostController::class, 'data'])->name('data');
 
-        Route::get('/data-client', [AdminPostsController::class, 'dataClient'])->name('data_client');
+        Route::get('/data-client', [AdminPostController::class, 'dataClient'])->name('data_client');
     });
 });
 
@@ -75,21 +75,21 @@ Route::post('/auth/reset-password', [ResetPasswordController::class, 'postResetP
 
 
 // Posts
-Route::resource('posts', PostsController::class)->middleware(['auth', 'check_user_status']);
+Route::resource('posts', PostController::class)->middleware(['auth', 'check_user_status']);
 
 Route::prefix('/news')->name('news.')->group(function () {
-    Route::get('/', [NewsController::class, 'index'])->name('list');
+    Route::get('/', [NewController::class, 'index'])->name('list');
 
-    Route::get('/{post:slug}', [NewsController::class, 'detail'])->middleware('check_post_status_approved')->name('detail');
+    Route::get('/{post:slug}', [NewController::class, 'show'])->middleware('check_post_status_approved')->name('detail');
 });
 
 // Users
 Route::prefix('users')->name('users.')->middleware(['auth', 'check_user_status'])->group(function () {
-    Route::get('profile', [UsersController::class, 'profile'])->name('profile');
+    Route::get('profile', [UserController::class, 'profile'])->name('profile');
 
-    Route::post('profile', [UsersController::class, 'postProfile']);
+    Route::post('profile', [UserController::class, 'postProfile']);
 
-    Route::delete('delete-all-post', [UsersController::class, 'deleteAllPost'])->name('delete_all_post');
+    Route::delete('delete-all-post', [UserController::class, 'deleteAllPost'])->name('delete_all_post');
 });
 
 // File manager
