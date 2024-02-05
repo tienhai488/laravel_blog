@@ -85,64 +85,6 @@
 
 @section('script')
     <script>
-        function fetch(title, email, status) {
-            $.ajax({
-                url: "{{ route('admin.posts.data') }}",
-                type: "GET",
-                data: {
-                    'title': title,
-                    'email': email,
-                    'status': status,
-                },
-                dataType: "json",
-                success: function(data) {
-                    initTable(data.data);
-                    // $('#datatable').DataTable({
-                    //     data: data,
-                    //     responsive: true,
-                    //     processing: true,
-                    //     serverSide: true,
-                    //     searching: false,
-                    //     pageLength: 1,
-                    //     paging: true,
-                    //     lengthChange: true,
-                    //     columns: [{
-                    //             data: "title",
-                    //             "render": function(data, type, row, meta) {
-                    //                 return "tienhai";
-                    //             }
-                    //         },
-                    //         {
-                    //             data: "thumbnail"
-                    //         },
-                    //         {
-                    //             data: "author"
-                    //         },
-                    //         {
-                    //             data: "status"
-                    //         },
-                    //         {
-                    //             data: "description"
-                    //         },
-                    //         {
-                    //             data: "publish_date"
-                    //         },
-                    //         {
-                    //             data: "created_at"
-                    //         },
-                    //         {
-                    //             data: "show"
-                    //         },
-                    //         {
-                    //             data: "edit"
-                    //         },
-                    //     ],
-                    // });
-
-                }
-            });
-        }
-
         let dataTable = new DataTable('#datatable', {
             ajax: {
                 url: '{{ route('admin.posts.data') }}',
@@ -152,9 +94,6 @@
                     data.status = $('#status').val();
                 },
             },
-            order: [
-                [6, 'desc']
-            ],
             ordering: false,
             processing: true,
             serverSide: true,

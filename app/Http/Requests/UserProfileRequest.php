@@ -20,21 +20,21 @@ class UserProfileRequest extends FormRequest
             'first_name' => [
                 'required',
                 'max:30',
-                'string'
+                'string',
             ],
             'last_name' => [
                 'required',
                 'max:30',
-                'string'
+                'string',
             ],
             'email' => [
                 'required',
                 'email:rfc,dns',
                 'max:100',
-                'unique:users,email,' . $id
+                'unique:users,email,' . $id,
             ],
             'address' => [
-                'max:255'
+                'max:255',
             ],
         ];
 

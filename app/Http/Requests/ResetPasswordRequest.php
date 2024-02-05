@@ -16,11 +16,11 @@ class ResetPasswordRequest extends FormRequest
     {
         return [
             'token' => [
-                'required'
+                'required',
             ],
             'email' => [
                 'required',
-                'email'
+                'email',
             ],
             'password' => [
                 'required',
@@ -29,7 +29,7 @@ class ResetPasswordRequest extends FormRequest
                     ->mixedCase()
                     ->numbers()
                     ->symbols(),
-                'confirmed'
+                'confirmed',
             ],
         ];
     }

@@ -22,7 +22,7 @@ class SendMailResetPassword implements ShouldQueue
 
     public function handle(): void
     {
-        $status = Password::sendResetLink(
+        Password::sendResetLink(
             $this->data
         );
     }

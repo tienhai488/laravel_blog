@@ -55,6 +55,7 @@ class UserService
 
     public function filterData($name, $email, $status)
     {
+        $users = User::orderBy('created_at', 'desc');
         $condition = '';
         if ($name != '') {
             if ($condition != '') {
@@ -77,6 +78,6 @@ class UserService
             $condition .= 'status =  ' . $status;
         }
 
-        return $condition ?  User::WhereRaw($condition) : User::query();
+        return $condition ?  $users->WhereRaw($condition) : $users;
     }
 }

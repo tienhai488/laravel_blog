@@ -17,7 +17,7 @@ class ForgotPasswordRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                'exists:users'
+                'exists:users',
             ],
         ];
     }

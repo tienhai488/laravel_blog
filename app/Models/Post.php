@@ -29,7 +29,7 @@ class Post extends Model implements HasMedia
     protected function thumbnail(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->getFirstMediaUrl(),
+            get: fn () => $this->getFirstMediaUrl('thumbnail'),
         );
     }
 

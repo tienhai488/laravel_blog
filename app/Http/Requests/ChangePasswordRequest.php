@@ -18,7 +18,7 @@ class ChangePasswordRequest extends FormRequest
         return [
             'password_old' => [
                 'required',
-                new CheckPasswordRule
+                new CheckPasswordRule,
             ],
             'password_new' => [
                 'required',
@@ -27,7 +27,7 @@ class ChangePasswordRequest extends FormRequest
                     ->mixedCase()
                     ->numbers()
                     ->symbols(),
-                'confirmed'
+                'confirmed',
             ],
         ];
     }

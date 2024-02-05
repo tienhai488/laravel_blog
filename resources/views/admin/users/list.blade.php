@@ -88,9 +88,9 @@
                     data.status = $('#status').val();
                 },
             },
-            order: [
-                [4, 'desc']
-            ],
+            // order: [
+            //     [4, 'desc']
+            // ],
             ordering: false,
             processing: true,
             serverSide: true,

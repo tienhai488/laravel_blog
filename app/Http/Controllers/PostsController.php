@@ -17,7 +17,7 @@ class PostsController extends Controller
     public function __construct()
     {
         $this->postService = new PostService();
-        $this->middleware("check_author_post")->except(['index', 'create', 'store']);
+        $this->middleware('check_author_post')->except(['index', 'create', 'store']);
         $this->user = Auth::user();
     }
 

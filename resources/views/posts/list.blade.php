@@ -62,15 +62,13 @@
             </section>
         </div>
     </div>
+    <x-modal.confirm title="Xóa bài viết" content="Bạn có chắc chắn muốn xóa?" />
 @endsection
 
 @section('script')
     <script>
         let dataTable = new DataTable('#datatable', {
             ajax: '{{ route('admin.posts.data_client') }}',
-            order: [
-                [5, 'desc']
-            ],
             ordering: false,
             processing: true,
             serverSide: true,
@@ -104,5 +102,27 @@
                 },
             ],
         });
+
+        const onOutsideModalDelete = (event) => {
+            const ignoreClickOnMeElement = document.querySelector(".form-main-modal-delete");
+            const isClickInsideElement = ignoreClickOnMeElement.contains(event.target);
+            if (!isClickInsideElement) {
+                offModalDelete();
+            }
+        };
+
+        const onModalDelete = (event) => {
+            $url = event.target.dataset.deleteUrl;
+            const form = document.querySelector(".container-form-modal-delete");
+            form.classList.add("active");
+            document.querySelector('#form-modal-delete').action = $url;
+        };
+
+
+        const offModalDelete = () => {
+            event.preventDefault();
+            const modalDelete = document.querySelector(".container-form-modal-delete");
+            modalDelete.classList.remove("active");
+        };
     </script>
 @endsection

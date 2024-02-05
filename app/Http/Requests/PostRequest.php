@@ -19,25 +19,25 @@ class PostRequest extends FormRequest
                 'required',
                 'string',
                 'max:100',
-                'unique:posts'
+                'unique:posts',
             ],
             'slug' => [
                 'required',
                 'string',
                 'max:100',
-                'unique:posts'
+                'unique:posts',
             ],
             'description' => [
                 'required',
                 'string',
-                'max:200'
+                'max:200',
             ],
             'content' => [
                 'required',
-                'string'
+                'string',
             ],
             'thumbnail' => [
-                'required'
+                'required',
             ],
         ];
 

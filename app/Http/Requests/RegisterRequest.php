@@ -18,17 +18,17 @@ class RegisterRequest extends FormRequest
             'first_name' => [
                 'required',
                 'max:30',
-                'string'
+                'string',
             ],
             'last_name' => [
                 'required',
                 'max:30',
-                'string'
+                'string',
             ],
             'email' => [
                 'required',
                 'email:rfc,dns',
-                'unique:users,email'
+                'unique:users,email',
             ],
             'password' => [
                 'required',
@@ -37,7 +37,7 @@ class RegisterRequest extends FormRequest
                     ->mixedCase()
                     ->numbers()
                     ->symbols(),
-                'confirmed'
+                'confirmed',
             ],
         ];
     }

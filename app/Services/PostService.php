@@ -113,6 +113,6 @@ class PostService
         if ($status != '') {
             $posts = $posts->where('status', $status);
         }
-        return $posts;
+        return $posts->orderBy('created_at', 'desc');
     }
 }

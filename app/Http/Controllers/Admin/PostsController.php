@@ -111,7 +111,7 @@ class PostsController extends Controller
 
         return DataTables::of($posts)
             ->editColumn('thumbnail', function ($post) {
-                $thumbnail = $post->getFirstMediaUrl('thumbnail');
+                $thumbnail = $post->thumbnail;
                 $slug = $post->slug;
                 return '<img style="width: 200px"
                 src="' . $thumbnail . '"
@@ -151,7 +151,7 @@ class PostsController extends Controller
             abort(404);
         }
 
-        $posts = Auth::user()->posts();
+        $posts = Auth::user()->posts()->orderBy('created_at', 'desc');
 
         return DataTables::of($posts)
             ->editColumn('title', function ($post) {
@@ -159,7 +159,7 @@ class PostsController extends Controller
                 href="' . route('posts.show', $post) . '">' . $post->title . '</a>';
             })
             ->editColumn('thumbnail', function ($post) {
-                $thumbnail = $post->getFirstMediaUrl('thumbnail');
+                $thumbnail = $post->thumbnail;
                 $slug = $post->slug;
                 return '<img style="width: 200px"
                 src="' . $thumbnail . '"
@@ -182,11 +182,9 @@ class PostsController extends Controller
                 </a>';
             })
             ->editColumn('delete', function ($post) {
-                return '<a href="' . route('posts.destroy', $post) . '" class="btn btn-danger" data-confirm-delete="true">
-                    <i style="pointer-events: none"
-                    class="fas fa-trash">
-                    </i>
-                </a>';
+                return '<button class="btn btn-danger" data-delete-url="' . route('posts.destroy', $post) . '" onclick="onModalDelete(event)">
+                <i style="pointer-events: none" class="fas fa-trash"></i>
+                </button>';
             })
             ->rawColumns(['title', 'thumbnail', 'status', 'edit', 'delete'])
             ->toJson();
