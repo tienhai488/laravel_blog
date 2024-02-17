@@ -28,14 +28,14 @@ class UserController extends Controller
     {
         $user = User::find(Auth::id());
 
-        $dataUpdate = [
+        $dataEdit = [
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'address' => $request->address,
         ];
 
-        $result = $this->userService->updateUser($user, $dataUpdate);
+        $result = $this->userService->editUser($user, $dataEdit);
 
         if ($result) {
             Alert::success('Thành công', 'Cập nhật thông tin thành công');
@@ -55,12 +55,8 @@ class UserController extends Controller
 
         $result = $this->userService->handleDeleteAllPost($user);
 
-        if ($result > 0) {
-            Alert::success('Thành công', 'Đã xóa thành công tất cả bài viết của bạn!');
-            $message = 'Xóa bài viết thành công!';
-        } else {
-            $message = 'Xóa tất cả bài viết của bạn không thành công!';
-        }
-        return to_route('posts.index')->with('message', $message);
+        return [
+            'result' => $result,
+        ];
     }
 }

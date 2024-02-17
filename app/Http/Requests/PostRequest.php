@@ -41,7 +41,7 @@ class PostRequest extends FormRequest
             ],
         ];
 
-        if (request()->routeIs('posts.update') || request()->routeIs('admin.posts.post_update')) {
+        if (request()->routeIs('posts.update') || request()->routeIs('admin.posts.post_edit')) {
             $rules['title'] = [
                 'required',
                 'string',
@@ -56,7 +56,7 @@ class PostRequest extends FormRequest
             ];
         }
 
-        if (request()->routeIs('admin.posts.post_update')) {
+        if (request()->routeIs('admin.posts.post_edit')) {
             $rules['status'] = [new PostStatusRule];
         }
 

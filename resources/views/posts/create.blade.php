@@ -19,7 +19,7 @@
                     value="{{ old('title') ?? session('title') }}" type="text" />
 
                 <x-form.input title="Slug" placeholder="Slug..." name="slug"
-                    value="{{ old('slug') ?? session('slug') }}" type="text" />
+                    value="{{ old('slug') ?? session('slug') }}" type="text" :readonly="true" />
 
                 <x-form.text-area title="Description" name="description" placeholder="Description..."
                     value="{{ old('description') }}" />

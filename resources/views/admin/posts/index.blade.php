@@ -101,6 +101,7 @@
             pageLength: 2,
             paging: true,
             lengthChange: true,
+            responsive: true,
             columns: [{
                     data: "title"
                 },

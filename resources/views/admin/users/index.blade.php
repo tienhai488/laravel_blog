@@ -88,9 +88,6 @@
                     data.status = $('#status').val();
                 },
             },
-            // order: [
-            //     [4, 'desc']
-            // ],
             ordering: false,
             processing: true,
             serverSide: true,
@@ -98,6 +95,7 @@
             pageLength: 3,
             paging: true,
             lengthChange: true,
+            responsive: true,
             columns: [{
                     data: "name"
                 },

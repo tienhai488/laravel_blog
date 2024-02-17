@@ -12,14 +12,14 @@
             @if ($errors->any())
                 <div class="alert alert-danger text-center">Vui lòng kiểm tra lại dữ liệu nhập vào!</div>
             @endif
-            <form action="{{ route('admin.posts.update', ['post' => $post]) }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('admin.posts.edit', ['post' => $post]) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <x-form.input title="Title" placeholder="Title..." name="title" value="{{ old('title') ?? $post->title }}"
                     type="text" />
 
                 <x-form.input title="Slug" placeholder="Slug..." name="slug" value="{{ old('slug') ?? $post->slug }}"
-                    type="text" />
+                    type="text" :readonly="true" />
 
 
 

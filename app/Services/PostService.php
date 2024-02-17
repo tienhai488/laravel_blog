@@ -6,6 +6,7 @@ use App\Jobs\SendMailChangePostStatus;
 use App\Models\Post;
 use Carbon\Carbon;
 use DOMDocument;
+use Illuminate\Support\Facades\Auth;
 
 class PostService
 {
@@ -76,9 +77,9 @@ class PostService
         return $post;
     }
 
-    public function updatePost(Post $post, $dataUpdate, $thumbnail)
+    public function editPost(Post $post, $dataEdit, $thumbnail)
     {
-        $post->update($dataUpdate);
+        $post->update($dataEdit);
         if ($post->getFirstMediaUrl('thumbnail') != $thumbnail) {
             $post->clearMediaCollection('thumbnail');
             $post
@@ -108,6 +109,19 @@ class PostService
             $posts = $posts->whereHas('user', function ($query) use ($email) {
                 $query->where('email', 'like', '%' . $email . '%');
             });
+        }
+
+        if ($status != '') {
+            $posts = $posts->where('status', $status);
+        }
+        return $posts->orderBy('created_at', 'desc');
+    }
+
+    public function filterDataClient($title, $status)
+    {
+        $posts = Auth::user()->posts();
+        if ($title != '') {
+            $posts = $posts->where('title', 'like', '%' . $title . '%');
         }
 
         if ($status != '') {

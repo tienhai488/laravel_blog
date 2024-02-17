@@ -9,7 +9,7 @@
             @if ($errors->any())
                 <div class="alert alert-danger text-center">Vui lòng kiểm tra lại dữ liệu nhập vào!</div>
             @endif
-            <form action="{{ route('admin.users.update', ['user' => $userUpdate]) }}" method="post">
+            <form action="{{ route('admin.users.edit', ['user' => $userUpdate]) }}" method="post">
                 @csrf
                 @method('PUT')
                 <div class="row">

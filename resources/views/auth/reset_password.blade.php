@@ -16,7 +16,7 @@
             @if ($errors->any())
                 <div class="alert alert-danger text-center">Vui lòng kiểm tra lại dữ liệu nhập vào!</div>
             @endif
-            <form action="{{ route('password.update') }}" method="post">
+            <form action="{{ route('password.edit') }}" method="post">
                 @csrf
                 <input type="hidden" name="token" value="{{ $token }}">
                 <x-form.input title="Email" placeholder="Email..." name="email" value="{{ request()->email }}"

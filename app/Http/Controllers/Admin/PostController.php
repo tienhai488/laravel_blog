@@ -53,12 +53,12 @@ class PostController extends Controller
      * @param Post $post
      * @return void
      */
-    public function update(Post $post)
+    public function edit(Post $post)
     {
         $thumbnail = $post->getFirstMediaUrl('thumbnail');
         $user = Auth::user();
         $title = 'Cập nhật bài viết';
-        return view('admin.posts.update', compact('title', 'post', 'user', 'thumbnail'));
+        return view('admin.posts.edit', compact('title', 'post', 'user', 'thumbnail'));
     }
 
     /**
@@ -68,14 +68,14 @@ class PostController extends Controller
      * @param Post $post
      * @return void
      */
-    public function postUpdate(PostRequest $request, Post $post)
+    public function postEdit(PostRequest $request, Post $post)
     {
         $content = $request->content;
         $this->postService->handleContent($post, $content);
 
         $checkSendMail = $post->status->value != $request->status;
 
-        $dataUpdate = [
+        $dataEdit = [
             'title' => $request->title,
             'slug' => $request->slug,
             'status' => $request->status,
@@ -83,13 +83,13 @@ class PostController extends Controller
         ];
 
         if ($post->isApproved()) {
-            $dataUpdate['publish_date'] = date('Y-m-d H:i:s');
+            $dataEdit['publish_date'] = date('Y-m-d H:i:s');
         } else {
-            $dataUpdate['publish_date'] = null;
+            $dataEdit['publish_date'] = null;
         }
 
         $thumbnail = $request->thumbnail;
-        $this->postService->updatePost($post, $dataUpdate, $thumbnail);
+        $this->postService->editPost($post, $dataEdit, $thumbnail);
 
         Alert::success('Thành công!', 'Cập nhật bài viết thành công!');
         $this->postService->sendMailChangePostStatus($post, $checkSendMail);
@@ -137,7 +137,7 @@ class PostController extends Controller
                 </a>';
             })
             ->editColumn('edit', function ($post) {
-                return '<a href="' . route('admin.posts.update', $post) . '" class="btn btn-warning">
+                return '<a href="' . route('admin.posts.edit', $post) . '" class="btn btn-warning">
                     <i class="far fa-edit"></i>
                 </a>';
             })
@@ -151,12 +151,16 @@ class PostController extends Controller
             abort(404);
         }
 
-        $posts = Auth::user()->posts()->orderBy('created_at', 'desc');
+        $title = $request->title ?? '';
+        $status = $request->status ?? '';
+
+        $posts = $this->postService->filterDataClient($title, $status);
 
         return DataTables::of($posts)
             ->editColumn('title', function ($post) {
+                $title = htmlspecialchars($post->title);
                 return '<a
-                href="' . route('posts.show', $post) . '">' . $post->title . '</a>';
+                href="' . route('posts.show', $post) . '">' . $title . '</a>';
             })
             ->editColumn('thumbnail', function ($post) {
                 $thumbnail = $post->thumbnail;
@@ -177,12 +181,12 @@ class PostController extends Controller
                 return Carbon::parse($post->created_at)->format('Y/m/d H:i:s');
             })
             ->editColumn('edit', function ($post) {
-                return '<a href="' . route('posts.update', $post) . '" class="btn btn-warning">
+                return '<a href="' . route('posts.edit', $post) . '" class="btn btn-warning">
                     <i class="far fa-edit"></i>
                 </a>';
             })
             ->editColumn('delete', function ($post) {
-                return '<button class="btn btn-danger" data-delete-url="' . route('posts.destroy', $post) . '" onclick="onModalDelete(event)">
+                return '<button class="btn btn-danger btn-delete" data-delete-url="' . route('posts.destroy', $post) . '" data-delete-type="delete-post" onclick="onModalDeletePost(event)">
                 <i style="pointer-events: none" class="fas fa-trash"></i>
                 </button>';
             })

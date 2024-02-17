@@ -38,7 +38,7 @@ class UserProfileRequest extends FormRequest
             ],
         ];
 
-        if (request()->routeIs('admin.users.post_update')) {
+        if (request()->routeIs('admin.users.post_edit')) {
             $rules['status'] = [new UserStatusRule];
             $rules['email'] = [
                 'required',

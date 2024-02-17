@@ -24,9 +24,6 @@ class PostController extends Controller
     public function index()
     {
         $title = 'Danh sách bài viết ';
-        $titleDelete = 'Delete Post!';
-        $textDelete = 'Are you sure you want to delete?';
-        confirmDelete($titleDelete, $textDelete);
         return view('posts.index', compact('title'));
     }
 
@@ -80,9 +77,8 @@ class PostController extends Controller
      */
     public function edit(Post $post, Request $request)
     {
-        $thumbnail = $post->getFirstMediaUrl('thumbnail');
         $title = 'Cập nhật bài viết';
-        return view('posts.edit', compact('title', 'post', 'thumbnail'));
+        return view('posts.edit', compact('title', 'post'));
     }
 
     public function update(PostRequest $request, Post $post)
@@ -90,14 +86,14 @@ class PostController extends Controller
         $content = $request->content;
         $this->postService->handleContent($post, $content);
 
-        $dataUpdate = [
+        $dataEdit = [
             'title' => $request->title,
             'slug' => $request->slug,
             'description' => $request->description,
         ];
 
         $thumbnail = $request->thumbnail;
-        $this->postService->updatePost($post, $dataUpdate, $thumbnail);
+        $this->postService->editPost($post, $dataEdit, $thumbnail);
 
         Alert::success('Thành công!', 'Cập nhật bài viết thành công!');
         return to_route('posts.index')->with('message', 'Cập nhật bài viết thành công!');
@@ -112,14 +108,10 @@ class PostController extends Controller
             return redirect('posts.list')->with('error', 'Không tồn tại bài viết vui lòng kiểm tra lại!');
         }
 
-        // $post->delete();
         $result = Post::destroy($post->id);
 
-        if ($result > 0) {
-            Alert::success('Thành công', 'Xóa bài viết thành công');
-            $message = 'Xóa bài viết thành công!';
-        }
-        $message = 'Xóa bài viết không thành công!';
-        return to_route('posts.index')->with('message', $message);
+        return [
+            'result' => $result,
+        ];
     }
 }

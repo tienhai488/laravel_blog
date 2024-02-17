@@ -31,9 +31,9 @@ Route::prefix('/admin')->middleware(['auth', 'check_user_status', 'check_admin']
     Route::prefix('/users')->name('users.')->group(function () {
         Route::get('/', [AdminUserController::class, 'index'])->name('index');
 
-        Route::get('/update/{user}', [AdminUserController::class, 'update'])->name('update');
+        Route::get('/edit/{user}', [AdminUserController::class, 'edit'])->name('edit');
 
-        Route::put('/update/{user}', [AdminUserController::class, 'postUpdate'])->name('post_update');
+        Route::put('/edit/{user}', [AdminUserController::class, 'postEdit'])->name('post_edit');
 
         Route::get("/data", [AdminUserController::class, 'data'])->name('data');
     });
@@ -42,9 +42,9 @@ Route::prefix('/admin')->middleware(['auth', 'check_user_status', 'check_admin']
     Route::prefix('/posts')->name('posts.')->group(function () {
         Route::get('/', [AdminPostController::class, 'index'])->name('index');
 
-        Route::get('/update/{post}', [AdminPostController::class, 'update'])->name('update');
+        Route::get('/edit/{post}', [AdminPostController::class, 'edit'])->name('edit');
 
-        Route::put('/update/{post}', [AdminPostController::class, 'postUpdate'])->name("post_update");
+        Route::put('/edit/{post}', [AdminPostController::class, 'postEdit'])->name("post_edit");
 
         Route::get("/data", [AdminPostController::class, 'data'])->name('data');
 
@@ -71,7 +71,7 @@ Route::prefix('/auth')->name('auth.')->group(function () {
 
 Route::get('/auth/reset-password/{token}', [ResetPasswordController::class, 'resetPassword'])->middleware('guest')->name('password.reset');
 
-Route::post('/auth/reset-password', [ResetPasswordController::class, 'postResetPassword'])->middleware('guest')->name('password.update');
+Route::post('/auth/reset-password', [ResetPasswordController::class, 'postResetPassword'])->middleware('guest')->name('password.edit');
 
 
 // Posts

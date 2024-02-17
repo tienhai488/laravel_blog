@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Enum\UserStatusEnum;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -56,6 +57,12 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->role == UserRoleEnum::ADMIN;
+    }
+
+    public function generateRememberToken()
+    {
+        $this->remember_token = Str::random(60);
+        $this->save();
     }
 
     protected $fillable = [

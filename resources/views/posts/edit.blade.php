@@ -20,7 +20,7 @@
                     type="text" />
 
                 <x-form.input title="Slug" placeholder="Slug..." name="slug" value="{{ old('slug') ?? $post->slug }}"
-                    type="text" />
+                    :readonly="true" type="text" />
 
                 <x-form.text-area title="Description" name="description" placeholder="Description..."
                     value="{{ old('description') ?? $post->description }}" />
@@ -31,7 +31,8 @@
                         <div class="col-10">
                             <input id="thumbnail" class="form-control @error('thumbnail') is-invalid @enderror"
                                 type="text" name="thumbnail" style="width: 100%"
-                                value="{{ old('thumbnail') ?? $thumbnail }}" placeholder="Thumbnail..." spellcheck="false">
+                                value="{{ old('thumbnail') ?? $post->thumbnail }}" placeholder="Thumbnail..."
+                                spellcheck="false">
                         </div>
                         <div class="col-2">
                             <span class="input-group-btn block">

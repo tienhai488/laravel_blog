@@ -18,6 +18,15 @@
                 <x-form.input title="Email" name="email" type="text" placeholder="Email..."
                     value="{{ old('email') ?? session('email') }}" />
                 <x-form.input title="Password" name="password" type="password" placeholder="Password..." value="" />
+                <div class="form-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="remember" id="remember"
+                            @checked(old('remember'))>
+                        <label class="form-check-label" for="remember">
+                            Remember Me
+                        </label>
+                    </div>
+                </div>
                 <button type="submit" class="btn btn-primary btn-block">
                     Đăng nhập
                 </button>

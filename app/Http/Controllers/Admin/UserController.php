@@ -37,7 +37,7 @@ class UserController extends Controller
         return view('admin.users.index', compact('title', 'user', 'users'));
     }
 
-    public function update(User $user)
+    public function edit(User $user)
     {
         $userUpdate = $user;
         $user = Auth::user();
@@ -45,16 +45,16 @@ class UserController extends Controller
             abort(404);
         }
         $title = 'Cập nhật người dùng';
-        return view('admin.users.update', compact('title', 'user', 'userUpdate'));
+        return view('admin.users.edit', compact('title', 'user', 'userUpdate'));
     }
 
-    public function postUpdate(UserProfileRequest $request, User $user)
+    public function postEdit(UserProfileRequest $request, User $user)
     {
         if ($user->id == Auth::id()) {
             abort(404);
         }
 
-        $dataUpdate = [
+        $dataEdit = [
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
@@ -62,7 +62,7 @@ class UserController extends Controller
             'address' => $request->address,
         ];
 
-        $result = $this->userService->updateUser($user, $dataUpdate);
+        $result = $this->userService->editUser($user, $dataEdit);
 
         if ($result) {
             Alert::success('Thành công', 'Cập nhật người dùng thành công');
@@ -83,14 +83,14 @@ class UserController extends Controller
     {
         $user = User::find(Auth::id());
 
-        $dataUpdate = [
+        $dataEdit = [
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
             'address' => $request->address,
         ];
 
-        $result = $this->userService->updateUser($user, $dataUpdate);
+        $result = $this->userService->editUser($user, $dataEdit);
 
         if ($result) {
             Alert::success('Thành công', 'Cập nhật thông tin thành công');
@@ -111,11 +111,11 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        $dataUpdate = [
+        $dataEdit = [
             'password' => Hash::make($request->password_new),
         ];
 
-        $result = $this->userService->updateUser($user, $dataUpdate);
+        $result = $this->userService->editUser($user, $dataEdit);
 
         if ($result) {
             Alert::success('Thành công', 'Thay đổi mật khẩu thành công');
@@ -148,7 +148,7 @@ class UserController extends Controller
                 return Carbon::parse($user->created_at)->format('Y/m/d H:i:s');
             })
             ->editColumn('edit', function ($user) {
-                return '<a href="' . route('admin.users.update', $user) . '" class="btn btn-warning">
+                return '<a href="' . route('admin.users.edit', $user) . '" class="btn btn-warning">
                     <i class="far fa-edit"></i>
                 </a>';
             })

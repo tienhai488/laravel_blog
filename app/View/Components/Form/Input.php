@@ -14,7 +14,8 @@ class Input extends Component
     public $placeholder;
     public $value;
     public $class;
-    public function __construct($title, $name, $type = "text", $placeholder, $value, $class = "")
+    public $readonly;
+    public function __construct($title, $name, $type = "text", $placeholder, $value, $class = "", $readonly = false)
     {
         $this->title = $title;
         $this->name = $name;
@@ -22,6 +23,7 @@ class Input extends Component
         $this->placeholder = $placeholder;
         $this->value = $value;
         $this->class = $class;
+        $this->readonly = $readonly;
     }
 
     public function render(): View|Closure|string

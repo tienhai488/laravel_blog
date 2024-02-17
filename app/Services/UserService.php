@@ -43,9 +43,9 @@ class UserService
         return User::WhereRaw($condition)->get();
     }
 
-    public function updateUser(User $user, $dataUpdate)
+    public function editUser(User $user, $dataEdit)
     {
-        return $user->update($dataUpdate);
+        return $user->update($dataEdit);
     }
 
     public function handleDeleteAllPost(User $user)
